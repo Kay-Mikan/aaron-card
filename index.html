@@ -218,7 +218,51 @@ textarea{resize:vertical; min-height:80px}
 @keyframes pop{from{transform:translateY(4px); opacity:0} to{transform:none; opacity:1}}
 .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
 
+/* stats + lessons */
+button.chip{cursor:pointer; font:inherit; font-size:13px}
+button.chip:hover{border-color:var(--muted)}
+.weekcard{display:block; width:100%; text-align:left; background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:14px 16px 12px; margin:-12px 0 28px; transition:border-color .15s}
+.weekcard:hover{border-color:var(--muted)}
+.wk-h{display:flex; justify-content:space-between; align-items:baseline; font-weight:700; font-size:14px}
+.wk-t{color:var(--ai); font-size:18px}
+.wk-link{display:block; font-size:12px; color:var(--muted); margin-top:4px}
+.chart{margin-top:10px}
+.cols{display:flex; align-items:flex-end; gap:3px}
+.col{flex:1; min-width:0; display:flex; flex-direction:column; align-items:stretch; background:none; border:0; padding:0; font:inherit; color:inherit}
+.stack{height:170px; display:flex; flex-direction:column; justify-content:flex-end; align-items:center}
+.chart.mini .stack{height:52px}
+.val{font-size:11px; color:var(--muted); line-height:1.2; margin-bottom:3px}
+.bar{width:72%; max-width:26px; border-radius:7px 7px 3px 3px; overflow:hidden; display:flex; flex-direction:column}
+.bar i{display:block; flex-basis:0; min-height:0}
+.bar i.n{background:var(--sky)} .bar i.r{background:var(--mint)} .bar i.c{background:var(--lilac)}
+.bar.none{height:3px!important; background:var(--line); border-radius:2px; padding:0}
+.lab{font-size:11px; color:var(--muted); text-align:center; margin-top:5px; height:15px; line-height:15px; white-space:nowrap}
+.col.today .lab{color:var(--ink); font-weight:700}
+.col[aria-pressed="true"] .bar{box-shadow:0 0 0 2px var(--bg), 0 0 0 4px var(--ink)}
+.legend{display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--muted); margin-top:12px}
+.legend i{display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; vertical-align:-1px}
+.day-detail{font-size:13px; margin-top:8px; min-height:21px}
+.tiles{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:10px 0 24px}
+.tile{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:12px 14px}
+.tile b{display:block; font-size:24px; font-weight:700; line-height:1.25}
+.tile span{font-size:12px; color:var(--muted)}
+.lgroup{font-size:12px; font-weight:700; color:var(--muted); margin:14px 0 4px}
+.lrow{display:grid; grid-template-columns:70px 1fr auto; gap:10px; align-items:center; padding:5px 0; font-size:14px}
+.lrow .num{font-size:12px; color:var(--muted); white-space:nowrap}
+.pbar{height:8px; background:var(--surface-2); border:1px solid var(--line); border-radius:999px; overflow:hidden; display:flex}
+.pbar i{display:block; height:100%}
+.pbar i.m{background:var(--mint)} .pbar i.l{background:var(--pink); opacity:.55}
+.lgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:8px; margin:0 0 18px}
+.lt{display:flex; flex-direction:column; gap:5px; align-items:stretch; text-align:left; border:1px solid var(--line); border-radius:14px; background:var(--surface); padding:8px 10px; font:inherit; color:inherit; transition:border-color .15s}
+.lt:hover{border-color:var(--muted)}
+.lt[aria-pressed="true"]{border-color:var(--ai); box-shadow:0 0 0 1px var(--ai)}
+.lt .ln{font-weight:700; font-size:14px; line-height:1.3}
+.lt .ld{font-size:11px; color:var(--muted)}
+.lt .ld.due{color:var(--ai); font-weight:700}
+
 @media (max-width:480px){
+  .tiles{grid-template-columns:1fr 1fr}
+  .stack{height:140px}
   main{padding:4px 16px 56px}
   .logo{font-size:15px; gap:8px}
   .chips{gap:6px}
@@ -330,6 +374,13 @@ const STR = {
     nCards: n => `${n} cards`,
     noRows: "No lines could be read", bulkAdded: n => `Added ${n} cards`,
     listen: "Play audio",
+    statsT: "Study log", stToday: "Today", stStreak: "Streak", stAvg: "7-day average", stLearned: "Words learned",
+    range7: "7 days", range30: "30 days", legNew: "New words", legRev: "Reviews", legConj: "Conjugation",
+    dayDetail: (d, o) => `${d}: ${o.n} new words, ${o.r} reviews, ${o.c} conjugation`, tapBar: "Tap a bar to see that day",
+    byLesson: "Progress by lesson", lessonNone: "Add a lesson number to your cards to see progress by lesson here.",
+    lg1: "Lessons 1–12", lg2: "Lessons 13–23", lg3: "Other lessons", legMastered: "Learned", legLearning: "Learning",
+    weekLabel: "This week", viewStats: "See your study log", dueN: n => `${n} due`, doneL: "Done", streakDays: n => `${n} days`,
+    wd: ["S","M","T","W","T","F","S"],
     typeStudy: "Type the answer",
     typePh: "Type in hiragana (romaji works too)",
     check: "Check",
@@ -418,6 +469,13 @@ const STR = {
     nCards: n => `${n}枚`,
     noRows: "読み取れる行がありません", bulkAdded: n => `${n}枚 追加しました`,
     listen: "音声を聞く",
+    statsT: "学習記録", stToday: "今日", stStreak: "連続", stAvg: "7日間の平均", stLearned: "覚えた単語",
+    range7: "7日間", range30: "30日間", legNew: "新しい単語", legRev: "復習", legConj: "活用練習",
+    dayDetail: (d, o) => `${d}　新しい単語 ${o.n}／復習 ${o.r}／活用 ${o.c}`, tapBar: "棒をタップすると、その日の内訳が出ます",
+    byLesson: "課ごとの進み具合", lessonNone: "カードに課の番号を付けると、ここに課ごとの進み具合が表示されます。",
+    lg1: "第1〜12課", lg2: "第13〜23課", lg3: "そのほか", legMastered: "覚えた", legLearning: "学習中",
+    weekLabel: "今週の学習", viewStats: "学習記録を見る", dueN: n => `${n}枚`, doneL: "完了", streakDays: n => `${n}日`,
+    wd: ["日","月","火","水","木","金","土"],
     typeStudy: "入力で学習",
     typePh: "ひらがなで入力（ローマ字でもOK）",
     check: "答え合わせ",
@@ -753,7 +811,10 @@ function speakText(text){
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "ja-JP"; u.rate = voiceSettings().rate; u.pitch = 1;
     const v = pickVoice(); if (v) u.voice = v;
-    speechSynthesis.cancel(); speechSynthesis.speak(u);
+    window.__lastUtter = u; // keep a reference so Android does not drop it
+    const go = () => { try { speechSynthesis.resume(); speechSynthesis.speak(u); } catch (e) {} };
+    if (speechSynthesis.speaking || speechSynthesis.pending){ speechSynthesis.cancel(); setTimeout(go, 150); }
+    else go();
   } catch (e) {}
 }
 if (canSpeak) try { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => { if (dlg.open && $("#f-voice")) voiceDialog(); }; } catch (e) {}
@@ -804,7 +865,7 @@ function header(){
   return `<header class="top">
     <button class="logo" data-action="home"><span class="mark" aria-hidden="true">A</span>${s.app}</button>
     <div class="chips">
-      <span class="chip">${s.today(today)}${st ? `<span class="streak" title="${st}${db.settings.lang === "ja" ? "日つづいてる" : "-day streak"}">🔥${st}</span>` : ""}</span>
+      <button class="chip" data-action="stats" aria-label="${s.statsT}" title="${s.statsT}">${s.today(today)}${st ? `<span class="streak" title="${st}${db.settings.lang === "ja" ? "日つづいてる" : "-day streak"}">🔥${st}</span>` : ""}</button>
       ${canSpeak ? `<button class="icon-round" data-action="voice" aria-label="${s.voiceT}" title="${s.voiceT}">${SPK}</button>` : ""}
       <button class="icon-round" data-action="lang" lang="${db.settings.lang === "en" ? "ja" : "en"}" aria-label="${s.langBtn}" title="${s.langBtn}">${db.settings.lang === "en" ? "あ" : "A"}</button>
     </div>
@@ -814,6 +875,98 @@ const isKana = c => !c.reading && /^[\u3040-\u30ff]{1,2}$/.test(c.jp);
 
 /* ---------- views ---------- */
 let view = { name: "home" };
+
+/* ---------- study log ---------- */
+function logDay(kind){
+  const k = dayKey();
+  db.stats.log[k] = (db.stats.log[k] || 0) + 1;
+  db.stats.days = db.stats.days || {};
+  const o = db.stats.days[k] || (db.stats.days[k] = { n: 0, r: 0, c: 0 });
+  o[kind] = (o[kind] || 0) + 1;
+}
+function dayData(k){
+  const o = db.stats.days && db.stats.days[k];
+  return o ? { n: o.n || 0, r: o.r || 0, c: o.c || 0 } : { n: 0, r: db.stats.log[k] || 0, c: 0 };
+}
+function lastDays(n){
+  const base = new Date(); base.setHours(12, 0, 0, 0); const out = [];
+  for (let i = n - 1; i >= 0; i--){ const x = new Date(base); x.setDate(base.getDate() - i); out.push(x); }
+  return out;
+}
+function niceMax(v){
+  const p = Math.pow(10, Math.floor(Math.log10(Math.max(v, 1))));
+  for (const m of [1, 2, 2.5, 5, 10]) if (m * p >= v) return m * p;
+  return 10 * p;
+}
+const md = x => db.settings.lang === "ja" ? `${x.getMonth()+1}/${x.getDate()}` : `${x.getMonth()+1}/${x.getDate()}`;
+function chartHTML(n, mini){
+  const s = T(), today = dayKey();
+  const data = lastDays(n).map(x => { const k = dayKey(x), o = dayData(k); return { k, x, ...o, t: o.n + o.r + o.c }; });
+  const top = niceMax(Math.max(4, ...data.map(o => o.t)) * 1.15);
+  const tag = mini ? "span" : "button";
+  return `<div class="chart${mini ? " mini" : ""}"><div class="cols">${data.map((o, i) => {
+    const lab = mini || n <= 7 ? s.wd[o.x.getDay()] : (i % 5 === 4 || i === n - 1 ? md(o.x) : "");
+    const bar = o.t ? `<span class="bar" style="height:${(o.t / top * 100).toFixed(2)}%"><i class="c" style="flex-grow:${o.c}"></i><i class="r" style="flex-grow:${o.r}"></i><i class="n" style="flex-grow:${o.n}"></i></span>` : `<span class="bar none"></span>`;
+    return `<${tag} class="col${o.k === today ? " today" : ""}" ${mini ? "" : `data-action="day" data-k="${o.k}" aria-pressed="${view.dayK === o.k}" aria-label="${s.dayDetail(md(o.x), o)}"`}>
+      <span class="stack">${!mini && o.t && (n <= 7 || view.dayK === o.k) ? `<span class="val">${o.t}</span>` : ""}${bar}</span><span class="lab">${lab}</span></${tag}>`;
+  }).join("")}</div></div>`;
+}
+function weekCard(){
+  const s = T(), total = lastDays(7).reduce((a, x) => { const o = dayData(dayKey(x)); return a + o.n + o.r + o.c; }, 0);
+  if (!Object.keys(db.stats.log).length) return "";
+  return `<button class="weekcard" data-action="stats"><span class="wk-h"><span>${s.weekLabel}</span><span class="wk-t">${total}</span></span>${chartHTML(7, true)}<span class="wk-link">${s.viewStats} ›</span></button>`;
+}
+function lessonStats(cards){
+  const o = { t: 0, m: 0, l: 0 };
+  for (const c of cards){ o.t++; if (c.state === "review") o.m++; else if (c.state !== "new") o.l++; }
+  return o;
+}
+const pbarHTML = o => `<span class="pbar"><i class="m" style="width:${o.t ? o.m / o.t * 100 : 0}%"></i><i class="l" style="width:${o.t ? o.l / o.t * 100 : 0}%"></i></span>`;
+function lessonTile(d, l){
+  const s = T(), cn = counts(d, l), due = cn.nw + cn.learn + cn.rev;
+  const st = lessonStats(d.cards.filter(c => inLesson(c, l)));
+  return `<button class="lt" data-action="lesson" data-l="${l ?? ""}" aria-pressed="${view.lesson === l}">
+    <span class="ln">${l == null ? s.allLessons : "L" + l}</span>${pbarHTML(st)}
+    <span class="ld${due ? " due" : ""}">${due ? s.dueN(due) : s.doneL}</span></button>`;
+}
+function renderStats(){
+  const s = T(), n = view.range || 7, today = dayKey();
+  const week = lastDays(7).map(x => dayData(dayKey(x))).map(o => o.n + o.r + o.c);
+  const avg = week.reduce((a, b) => a + b, 0) / 7;
+  const all = db.decks.flatMap(d => d.cards);
+  const learned = all.filter(c => c.state === "review").length;
+  const t = dayData(today);
+  const sel = view.dayK ? (() => { const x = new Date(view.dayK + "T12:00:00"); return s.dayDetail(md(x), dayData(view.dayK)); })() : s.tapBar;
+  const lessons = [...new Set(all.map(c => c.lesson).filter(l => l != null))].sort((a, b) => a - b);
+  const row = l => { const o = lessonStats(all.filter(c => c.lesson === l)); return `<div class="lrow"><span>${s.lesson(l)}</span>${pbarHTML(o)}<span class="num">${o.m} / ${o.t}</span></div>`; };
+  const group = (title, ls) => ls.length ? `<div class="lgroup">${title}</div>${ls.map(row).join("")}` : "";
+  app.innerHTML = `${header()}
+    <div class="deck-head">
+      <button class="back" data-action="home">${s.toDecks}</button>
+      <h1>${s.statsT}</h1>
+    </div>
+    <div class="tiles">
+      <div class="tile"><b>${t.n + t.r + t.c}</b><span>${s.stToday}</span></div>
+      <div class="tile"><b>${s.streakDays(streak())}</b><span>${s.stStreak}</span></div>
+      <div class="tile"><b>${avg.toFixed(avg < 10 ? 1 : 0)}</b><span>${s.stAvg}</span></div>
+      <div class="tile"><b>${learned}</b><span>${s.stLearned}</span></div>
+    </div>
+    <section class="panel" style="margin-top:0">
+      <div class="lessons" role="group" style="margin:0">
+        <button class="lchip" data-action="range" data-n="7" aria-pressed="${n === 7}">${s.range7}</button>
+        <button class="lchip" data-action="range" data-n="30" aria-pressed="${n === 30}">${s.range30}</button>
+      </div>
+      ${chartHTML(n, false)}
+      <div class="legend"><span><i style="background:var(--sky)"></i>${s.legNew}</span><span><i style="background:var(--mint)"></i>${s.legRev}</span><span><i style="background:var(--lilac)"></i>${s.legConj}</span></div>
+      <div class="day-detail">${sel}</div>
+    </section>
+    <section class="panel">
+      <h2 class="section-title">${s.byLesson}</h2>
+      ${lessons.length ? `${group(s.lg1, lessons.filter(l => l <= 12))}${group(s.lg2, lessons.filter(l => l >= 13 && l <= 23))}${group(s.lg3, lessons.filter(l => l > 23))}
+        <div class="legend"><span><i style="background:var(--mint)"></i>${s.legMastered}</span><span><i style="background:var(--pink);opacity:.55"></i>${s.legLearning}</span></div>`
+      : `<p class="note" style="margin:0">${s.lessonNone}</p>`}
+    </section>`;
+}
 
 function renderHome(){
   const s = T();
@@ -825,6 +978,7 @@ function renderHome(){
   else { say = s.heroDue(total); sub = s.heroDueSub; }
   app.innerHTML = `${header()}
     <section class="hero">${mochi(total ? "idle" : "happy")}<div class="bubble">${say}<small>${sub}</small></div></section>
+    ${weekCard()}
     <h2 class="section-title">${s.decks}</h2>
     <div class="grid">
       ${db.decks.map(d => `<button class="deck" data-action="open-deck" data-id="${d.id}">
@@ -854,10 +1008,7 @@ function renderDeck(){
       <button class="back" data-action="home">${s.toDecks}</button>
       <h1>${esc(d.name)}</h1>
       <p class="dir">${d.dir === "en-jp" ? s.enJp : s.jpEn}</p>
-      ${lessons.length ? `<div class="lessons" role="group">
-        <button class="lchip" data-action="lesson" data-l="" aria-pressed="${view.lesson == null}">${s.allLessons}</button>
-        ${lessons.map(l => `<button class="lchip" data-action="lesson" data-l="${l}" aria-pressed="${view.lesson === l}">${s.lesson(l)}</button>`).join("")}
-      </div>` : ""}
+      ${lessons.length ? `<div class="lgrid" role="group">${[null, ...lessons].map(l => lessonTile(d, l)).join("")}</div>` : ""}
       ${cntPills(c, "big-counts")}
       <div class="actions">
         <button class="btn pink big" data-action="study" ${canStudy ? "" : "disabled"}>${canStudy ? s.study : s.studyNone}</button>
@@ -1199,7 +1350,7 @@ function rateConj(r){
   d.conj[p.key] = { state: n.state, due: n.due, interval: n.interval, ease: n.ease, step: n.step, reps: n.reps, lapses: n.lapses };
   const k = dayKey();
   if (p.st.state === "new"){ const lk = conjLogKey(); if (!d[lk] || d[lk].date !== k) d[lk] = { date: k, n: 0 }; d[lk].n++; }
-  db.stats.log[k] = (db.stats.log[k] || 0) + 1;
+  logDay("c");
   if ((r === 1 || (view.typed && !view.typed.ok)) && !view.misses.some(m => m.key === p.key))
     view.misses.push({ key: p.key, base: baseOf(p.card), form: p.form, ans: p.res.jp, rd: p.res.reading, rule: ruleInfo(p.card, p.form, p.res) });
   save();
@@ -1216,6 +1367,7 @@ function render(){
   else if (view.name === "study") renderStudy();
   else if (view.name === "conj-setup") renderConjSetup();
   else if (view.name === "conj") renderConj();
+  else if (view.name === "stats") renderStats();
   else renderHome();
 }
 function go(v){ view = v; render(); window.scrollTo(0, 0); }
@@ -1229,7 +1381,7 @@ function rate(r){
     if (!d.newLog || d.newLog.date !== k) d.newLog = { date: k, n: 0 };
     d.newLog.n++;
   }
-  const k = dayKey(); db.stats.log[k] = (db.stats.log[k] || 0) + 1;
+  logDay(old.state === "new" ? "n" : "r");
   save();
   view.done = (view.done || 0) + 1;
   view.reaction = r; view.flipped = false; view.typed = null;
@@ -1410,6 +1562,9 @@ document.addEventListener("click", e => {
   const a = el.dataset.action, id = el.dataset.id, d = getDeck(view.id), s = T();
   switch (a){
     case "home": go({ name: "home" }); break;
+    case "stats": go({ name: "stats", range: 7 }); break;
+    case "range": view.range = Number(el.dataset.n); view.dayK = null; renderStats(); break;
+    case "day": view.dayK = el.dataset.k; renderStats(); break;
     case "lang": db.settings.lang = db.settings.lang === "en" ? "ja" : "en"; save(); render(); break;
     case "voice": voiceDialog(); break;
     case "open-deck": go({ name: "deck", id, lesson: view.id === id ? view.lesson : null }); break;
