@@ -355,6 +355,7 @@ const STR = {
     deckNew: "New deck", deckName: "Name", deckNamePh: "e.g. Lesson 3 vocab",
     color: "Color", dir: "Front of the card",
     showRd: "Show the reading (hiragana) on the front",
+    orderL: "Card order", orderRand: "Random", orderSeq: "In the order added",
     autoplay: "Play audio when the answer is shown",
     create: "Create", save: "Save", cancel: "Cancel", close: "Close",
     delDeck: "Delete deck",
@@ -450,6 +451,7 @@ const STR = {
     deckNew: "新しいデッキ", deckName: "名前", deckNamePh: "例：第3課の単語",
     color: "色", dir: "カードの表に出すもの",
     showRd: "表に読み（ひらがな）を表示する",
+    orderL: "出題の順番", orderRand: "ランダム", orderSeq: "登録した順",
     autoplay: "答えを見たときに音声を流す",
     create: "作成する", save: "保存する", cancel: "やめる", close: "閉じる",
     delDeck: "デッキを削除",
@@ -623,10 +625,14 @@ function nextCard(deck, lesson, lastId){
   const dueLearn = learning.filter(c => c.due <= now).sort(by);
   if (dueLearn.length) return dueLearn[0];
   const dueRev = pool.filter(c => c.state === "review" && c.due <= eod).sort(by);
-  if (dueRev.length) return dueRev[0];
-  if (newLeft(deck) > 0){
-    const nw = pool.filter(c => c.state === "new").sort((a, b) => a.created - b.created);
-    if (nw.length) return nw[0];
+  const nwAll = newLeft(deck) > 0 ? pool.filter(c => c.state === "new").sort((a, b) => a.created - b.created) : [];
+  if (deck.order !== "seq"){
+    const cand = [...dueRev, ...nwAll.slice(0, newLeft(deck))];
+    const other = cand.filter(c => c.id !== lastId), src = other.length ? other : cand;
+    if (src.length) return src[Math.floor(Math.random() * src.length)];
+  } else {
+    if (dueRev.length) return dueRev[0];
+    if (nwAll.length) return nwAll[0];
   }
   const ahead = learning.filter(c => c.due <= now + LEARN_AHEAD).sort(by);
   return ahead.find(c => c.id !== lastId) || ahead[0] || null;
@@ -1175,7 +1181,15 @@ function nextPair(d, pairs, lastKey){
   const now = Date.now(), eod = endOfToday(), by = (a, b) => a.st.due - b.st.due;
   const learning = pairs.filter(p => p.st.state === "learning" || p.st.state === "relearning");
   const dl = learning.filter(p => p.st.due <= now).sort(by); if (dl.length) return dl[0];
-  const dr = pairs.filter(p => p.st.state === "review" && p.st.due <= eod).sort(by); if (dr.length) return dr[0];
+  const dr = pairs.filter(p => p.st.state === "review" && p.st.due <= eod).sort(by);
+  if (d.order !== "seq"){
+    const lastCard = (lastKey || "").split("|")[0];
+    const nwR = conjNewLeft(d) > 0 ? pairs.filter(p => p.st.state === "new") : [];
+    const cand = [...dr, ...nwR];
+    const other = cand.filter(p => p.card.id !== lastCard), src = other.length ? other : cand;
+    if (src.length) return src[Math.floor(Math.random() * src.length)];
+  }
+  if (dr.length) return dr[0];
   if (conjNewLeft(d) > 0){
     const nw = pairs.filter(p => p.st.state === "new" && p.card.id !== (lastKey || "").split("|")[0]).sort((a, b) => hashKey(a.key) - hashKey(b.key));
     const any = nw[0] || pairs.find(p => p.st.state === "new");
@@ -1420,6 +1434,10 @@ function deckDialog(deck){
       <option value="en-jp" ${deck && deck.dir === "en-jp" ? "selected" : ""}>${s.enJp}</option>
     </select></label>
     <label class="check"><input type="checkbox" id="f-rd" ${!deck || deck.showRd ? "checked" : ""}>${s.showRd}</label>
+    <label>${s.orderL}<select id="f-order">
+      <option value="rand" ${!deck || deck.order !== "seq" ? "selected" : ""}>${s.orderRand}</option>
+      <option value="seq" ${deck && deck.order === "seq" ? "selected" : ""}>${s.orderSeq}</option>
+    </select></label>
     ${canSpeak ? `<label class="check"><input type="checkbox" id="f-auto" ${!deck || deck.autoplay ? "checked" : ""}>${s.autoplay}</label>` : ""}
     <label>${s.color}<div class="swatches">${COLORS.map(c => `<button type="button" class="sw" data-c="${c}" style="background:var(--${c})" aria-label="${c}" aria-pressed="${c === color}"></button>`).join("")}</div></label>
     <div class="row end">
@@ -1434,7 +1452,7 @@ function deckDialog(deck){
       const name = el.querySelector("#f-name").value.trim();
       if (!name){ el.querySelector("#f-name").focus(); toast(s.nameReq); return; }
       const auto = el.querySelector("#f-auto");
-      const vals = { name, color, dir: el.querySelector("#f-dir").value, showRd: el.querySelector("#f-rd").checked, autoplay: auto ? auto.checked : false };
+      const vals = { name, color, dir: el.querySelector("#f-dir").value, showRd: el.querySelector("#f-rd").checked, order: el.querySelector("#f-order").value, autoplay: auto ? auto.checked : false };
       if (deck){ Object.assign(deck, vals); save(); closeDialog(); render(); toast(s.saved); }
       else { const d = Object.assign({ id: uid(), newLog: null, cards: [] }, vals); db.decks.push(d); save(); closeDialog(); go({ name: "deck", id: d.id }); toast(s.created); }
     };
