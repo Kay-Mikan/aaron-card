@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aaron’s Card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F1F3F4; --surface:#FFFFFF; --surface-2:#F5F6F8;
+  --ink:#1C2638; --muted:#5E6777; --line:#DCE0E6;
+  --ai:#24365C; --ai-ink:#FFFFFF;
+  --pink:#A8473A; --butter:#8A6B1C; --mint:#3E6A4A; --sky:#2E5D89; --lilac:#665796;
+  --on-accent:#FFFFFF; --danger:#A8473A; --ok:#3E6A4A;
+  --ui:"Zen Kaku Gothic New","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",system-ui,sans-serif;
+  --jp:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;
+  --card-shadow:0 1px 0 var(--line), 0 12px 32px -18px rgba(20,32,56,.35);
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1420; --surface:#161E2E; --surface-2:#1B2436; --ink:#E6E9EF; --muted:#9AA3B2; --line:#2A3448;
+    --ai:#9DB4E0; --ai-ink:#0E1420;
+    --pink:#D88573; --butter:#D4AE52; --mint:#86B892; --sky:#86AEDC; --lilac:#AE9FDC;
+    --on-accent:#0E1420; --danger:#E08C7B; --ok:#86B892;
+    --card-shadow:0 1px 0 var(--line), 0 16px 40px -20px rgba(0,0,0,.7);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1420; --surface:#161E2E; --surface-2:#1B2436; --ink:#E6E9EF; --muted:#9AA3B2; --line:#2A3448;
+  --ai:#9DB4E0; --ai-ink:#0E1420;
+  --pink:#D88573; --butter:#D4AE52; --mint:#86B892; --sky:#86AEDC; --lilac:#AE9FDC;
+  --on-accent:#0E1420; --danger:#E08C7B; --ok:#86B892;
+  --card-shadow:0 1px 0 var(--line), 0 16px 40px -20px rgba(0,0,0,.7);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0; min-height:100vh; font-family:var(--ui); font-weight:400; color:var(--ink); background:var(--bg); line-height:1.7; -webkit-font-smoothing:antialiased}
+main{max-width:720px; margin:0 auto; padding:8px 20px 64px}
+button{font:inherit; color:inherit; cursor:pointer}
+:focus-visible{outline:2px solid var(--ai); outline-offset:2px; border-radius:6px}
+.jp{font-family:var(--jp); font-weight:600}
+.mochi{display:none!important}
+
+/* header */
+.top{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); margin-bottom:6px}
+.logo{display:flex; align-items:center; gap:10px; background:none; border:0; padding:2px 0; font-weight:700; font-size:16px; letter-spacing:.04em; white-space:nowrap}
+.mark{width:30px; height:30px; flex:none; display:grid; place-items:center; background:var(--ai); color:var(--ai-ink); border-radius:6px; font-family:var(--jp); font-weight:700; font-size:17px; letter-spacing:0; line-height:1}
+.chips{display:flex; gap:8px; align-items:center; justify-content:flex-end}
+.top .chips{flex-wrap:nowrap}
+.chip{font-size:13px; color:var(--muted); padding:4px 10px; border-radius:6px; border:1px solid var(--line); white-space:nowrap}
+.chip b{font-weight:700; font-size:14px; color:var(--ink); margin:0 3px 0 6px}
+.chip .streak{margin-left:8px; color:var(--ink); font-weight:700}
+.icon-round{width:34px; height:34px; flex:none; border-radius:50%; border:1px solid var(--line); background:var(--surface); display:grid; place-items:center; padding:0; font-family:var(--jp); font-weight:600; font-size:15px; line-height:1; transition:border-color .15s}
+.icon-round:hover{border-color:var(--muted)}
+.icon-round svg{width:17px; height:17px}
+.lang{background:none; border:1px solid var(--line); border-radius:6px; padding:3px 10px; font-size:13px}
+
+/* buttons */
+.btn{font-weight:700; border:1px solid var(--line); border-radius:8px; padding:10px 18px; background:var(--surface); color:var(--ink);
+  transition:background .15s, border-color .15s, transform .08s; display:inline-flex; align-items:center; justify-content:center; gap:6px; letter-spacing:.02em}
+.btn:hover{border-color:var(--muted)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.4; cursor:not-allowed; transform:none}
+.btn.pink{background:var(--ai); border-color:var(--ai); color:var(--ai-ink)}
+.btn.mint{background:transparent; border-color:var(--ai); color:var(--ai)}
+.btn.big{font-size:16px; padding:13px 28px}
+.btn.small{font-size:13px; padding:6px 12px; font-weight:500}
+.btn.ghost{background:transparent; border-color:transparent; text-decoration:underline; text-underline-offset:4px; font-weight:500}
+.btn.danger{color:var(--danger)}
+.btn.danger.fill{background:var(--danger); border-color:var(--danger); color:#fff}
+.back{background:none; border:0; font-weight:500; color:var(--muted); padding:6px 0; font-size:14px}
+
+/* hero */
+.hero{margin:40px 0 36px}
+.bubble{font-family:var(--jp); font-weight:600; font-size:clamp(26px,6.6vw,38px); line-height:1.35; letter-spacing:.01em}
+.bubble small{display:block; font-family:var(--ui); font-weight:400; font-size:14px; color:var(--muted); margin-top:12px; max-width:46ch; letter-spacing:0; line-height:1.7}
+
+/* deck grid */
+.section-title{font-size:13px; font-weight:700; color:var(--muted); letter-spacing:.06em; margin:0 0 12px}
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px}
+.deck{text-align:left; border:1px solid var(--line); border-radius:10px; background:var(--surface); padding:0; overflow:hidden; transition:border-color .15s}
+.deck:hover{border-color:var(--muted)}
+.deck .tab{height:3px}
+.deck .in{padding:14px 16px 16px}
+.deck h3{margin:0 0 10px; font-family:var(--jp); font-weight:600; font-size:18px; line-height:1.4; word-break:break-word}
+.counts{display:flex; gap:6px; flex-wrap:wrap}
+.cnt{--c:var(--muted); font-size:12px; font-weight:700; padding:2px 8px; border-radius:4px; color:var(--c); background:color-mix(in srgb, var(--c) 13%, transparent); white-space:nowrap}
+.cnt.new{--c:var(--sky)} .cnt.learn{--c:var(--pink)} .cnt.rev{--c:var(--mint)}
+.cnt.zero{--c:var(--muted); background:transparent; font-weight:500; padding-left:0; padding-right:6px}
+.deck.add{display:flex; align-items:center; justify-content:center; min-height:104px; border-style:dashed; background:transparent; font-weight:500; color:var(--muted); font-size:14px}
+
+/* deck page */
+.deck-head{margin:12px 0 22px}
+.deck-head h1{font-family:var(--jp); font-weight:600; font-size:clamp(26px,6.4vw,34px); line-height:1.3; margin:4px 0 2px; word-break:break-word}
+.deck-head .dir{font-size:13px; color:var(--muted); margin:0 0 14px}
+.big-counts{margin-bottom:20px}
+.big-counts .cnt{font-size:13px; padding:3px 10px}
+.lessons{display:flex; gap:6px; flex-wrap:wrap; margin:0 0 16px}
+.lchip{border:1px solid var(--line); border-radius:6px; padding:4px 12px; background:var(--surface); font-weight:500; font-size:13px; transition:border-color .15s}
+.lchip:hover{border-color:var(--muted)}
+.lchip[aria-pressed="true"]{background:var(--ai); border-color:var(--ai); color:var(--ai-ink)}
+.lchip.kind{font-size:14px; padding:7px 18px; font-weight:700}
+.actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:16px; margin-top:28px}
+.search{width:100%; margin-bottom:6px}
+.clist{list-style:none; margin:0; padding:0}
+.clist li{display:grid; grid-template-columns:1fr auto; gap:6px 12px; padding:12px 2px; border-top:1px solid var(--line); align-items:center}
+.clist li:first-child{border-top:0}
+.clist .f{font-size:19px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; line-height:1.4}
+.clist .f small{font-family:var(--ui); font-weight:400; font-size:13px; color:var(--muted); margin-left:8px}
+.clist .b{color:var(--muted); font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.clist .meta{display:flex; gap:6px; align-items:center; justify-content:flex-end; flex-wrap:wrap}
+.lbadge,.wbadge{font-size:11px; font-weight:700; padding:1px 6px; border-radius:4px; border:1px solid var(--line); color:var(--muted); white-space:nowrap}
+.wbadge{color:var(--lilac); border-color:color-mix(in srgb, var(--lilac) 40%, transparent)}
+.status{font-size:12px; color:var(--muted); white-space:nowrap}
+.icon-btn{background:none; border:0; padding:6px 8px; border-radius:6px; font-size:13px; color:var(--muted)}
+.icon-btn:hover{background:var(--surface-2); color:var(--ink)}
+.empty{color:var(--muted); text-align:center; padding:20px 0; margin:0}
+
+/* study */
+.study-top{display:flex; align-items:center; justify-content:space-between; gap:10px; margin:6px 0 10px; flex-wrap:wrap}
+.study-top .name{font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; min-width:0}
+.stage{position:relative; perspective:1600px; margin-top:34px}
+.peek{position:absolute; right:0; top:-30px; z-index:2; pointer-events:none}
+.peek .say{display:inline-block; white-space:nowrap; background:var(--ink); color:var(--bg); border-radius:6px; padding:2px 10px; font-weight:700; font-size:12px; animation:pop .2s ease-out}
+.card{position:relative; width:100%; min-height:min(56vh,380px); cursor:pointer; transform-style:preserve-3d; transition:transform .5s cubic-bezier(.2,.8,.2,1); text-align:center}
+.card.flipped{transform:rotateY(180deg); cursor:default}
+.face{position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--card-shadow);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; padding:44px 24px 56px; overflow:auto}
+.face.back{transform:rotateY(180deg)}
+.rd{font-size:clamp(14px,3.6vw,17px); color:var(--muted); letter-spacing:.14em; font-family:var(--jp)}
+.q{font-size:clamp(30px,8.4vw,54px); line-height:1.35; word-break:break-word}
+.q.en{font-family:var(--ui); font-weight:700; font-size:clamp(24px,6vw,34px); letter-spacing:.01em}
+.q.kana{font-size:clamp(68px,22vw,120px); line-height:1.1; font-weight:600}
+.mini{font-size:clamp(15px,3.8vw,18px); color:var(--muted)}
+.mini.en{font-weight:500}
+.face.back hr{width:40px; border:0; border-top:1px solid var(--line); margin:16px auto}
+.a{font-size:clamp(22px,6vw,34px); line-height:1.4; word-break:break-word}
+.a.en{font-weight:700}
+.memo{margin-top:12px; font-size:14px; color:var(--muted); background:var(--surface-2); border-radius:6px; padding:4px 12px}
+.hint{position:absolute; bottom:16px; left:0; right:0; font-size:12px; color:var(--muted); letter-spacing:.04em}
+.tag{position:absolute; top:14px; left:16px; font-size:11px; font-weight:700; padding:2px 8px; border-radius:4px; color:var(--on-accent); letter-spacing:.04em}
+.spk{position:absolute; bottom:12px; right:14px; width:38px; height:38px; border-radius:50%; border:1px solid var(--line); background:var(--surface); display:grid; place-items:center; padding:0; color:var(--ink)}
+.spk svg{width:17px; height:17px}
+.face .mean{color:var(--muted); margin-top:4px; font-size:14px}
+.form-label{display:inline-block; margin-top:16px; color:var(--ai); border:1px solid var(--ai); border-radius:6px; padding:4px 14px; font-weight:700; font-size:clamp(14px,4vw,17px)}
+.controls{margin-top:24px; min-height:90px}
+.reveal{width:100%}
+.rates{display:grid; grid-template-columns:repeat(4,1fr); gap:8px}
+.rate{flex-direction:column; gap:0; padding:9px 4px; border-radius:8px; border:0; color:var(--on-accent); line-height:1.3}
+.rate:hover{filter:brightness(1.08)}
+.rate .iv{font-size:12px; opacity:.85; font-weight:500}
+.rate .lb{font-size:15px; font-weight:700}
+.rate.r1{background:var(--pink)} .rate.r2{background:var(--butter)} .rate.r3{background:var(--mint)} .rate.r4{background:var(--sky)}
+.rate.rec{box-shadow:0 0 0 2px var(--bg), 0 0 0 4px var(--ink)}
+.keys{text-align:center; font-size:12px; color:var(--muted); margin-top:16px}
+.done{text-align:center; padding:56px 0 24px}
+.done h2{font-family:var(--jp); font-weight:600; font-size:clamp(24px,6vw,32px); margin:0 0 6px}
+.done p{color:var(--muted); margin:0 0 26px}
+
+/* typing + rules */
+.ansbox{display:flex; gap:8px; align-items:stretch}
+.ansbox input{flex:1; min-width:0; margin:0; font-family:var(--jp); font-size:22px; text-align:center; background:var(--surface)}
+.result{display:flex; flex-wrap:wrap; gap:4px 12px; justify-content:center; align-items:baseline; font-weight:700; font-size:16px; margin-bottom:14px; text-align:center}
+.result.ok{color:var(--ok)} .result.ng{color:var(--danger)}
+.result .jp{color:var(--ink); font-size:21px}
+.result s{color:var(--muted); font-weight:500}
+.rule{margin:0 auto 16px; max-width:540px; background:var(--surface-2); border-left:3px solid var(--ai); border-radius:6px; padding:10px 14px 12px; font-size:14px; text-align:left}
+.rule .g{display:inline-block; color:var(--ai); border:1px solid color-mix(in srgb, var(--ai) 45%, transparent); border-radius:4px; padding:0 7px; font-size:12px; font-weight:700; margin:0 8px 4px 0; vertical-align:middle}
+.rule .ch{font-family:var(--jp); font-weight:600; font-size:20px; vertical-align:middle; white-space:nowrap}
+.rule p{margin:4px 0 0; color:var(--muted); line-height:1.65}
+.face.back .rule{margin:16px auto 0; width:100%}
+.clist .why{white-space:normal; font-size:13px; margin-top:2px}
+.setup-group{margin-bottom:22px}
+.qcard{position:relative; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:44px 20px 28px; text-align:center}
+.bar{height:4px; background:var(--line); border-radius:999px; overflow:hidden}
+.bar i{display:block; height:100%; background:var(--ai)}
+
+/* dialog */
+dialog{border:1px solid var(--line); border-radius:12px; background:var(--surface); color:var(--ink); padding:22px; width:min(520px, calc(100vw - 28px)); max-height:calc(100vh - 40px); box-shadow:0 24px 64px -16px rgba(10,20,40,.35)}
+dialog::backdrop{background:rgba(14,20,32,.45)}
+dialog h2{font-family:var(--jp); font-weight:600; font-size:20px; margin:0 0 14px}
+dialog p{margin:0 0 14px}
+label{display:block; font-weight:500; font-size:14px; margin-bottom:12px}
+input[type=text],input[type=search],input[type=number],textarea,select{display:block; width:100%; margin-top:6px; font:inherit; color:var(--ink); background:var(--surface-2); border:1px solid var(--line); border-radius:8px; padding:10px 12px}
+input.jp,textarea.jp{font-family:var(--jp); font-size:18px}
+input:focus,textarea:focus,select:focus{outline:none; border-color:var(--ai); box-shadow:0 0 0 3px color-mix(in srgb, var(--ai) 18%, transparent)}
+textarea{resize:vertical; min-height:80px}
+.two{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.check{display:flex; gap:10px; align-items:center}
+.check input{width:18px; height:18px; accent-color:var(--ai); margin:0}
+.row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+.row.end{justify-content:flex-end; margin-top:6px}
+.swatches{display:flex; gap:10px; margin-top:8px}
+.sw{width:28px; height:28px; border-radius:50%; border:0}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--surface), 0 0 0 4px var(--ink)}
+.note{font-size:13px; color:var(--muted)}
+.toast{position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%) translateY(16px); background:var(--ink); color:var(--bg); font-weight:500; font-size:14px; padding:8px 16px; border-radius:8px; opacity:0; transition:opacity .2s, transform .2s; pointer-events:none; z-index:50; white-space:nowrap}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+@keyframes pop{from{transform:translateY(4px); opacity:0} to{transform:none; opacity:1}}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
+
+@media (max-width:480px){
+  main{padding:4px 16px 56px}
+  .logo{font-size:15px; gap:8px}
+  .chips{gap:6px}
+  .chip{padding:3px 8px}
+  .rates{gap:6px}
+  .rate .lb{font-size:13px}
+  .grid{grid-template-columns:1fr 1fr; gap:10px}
+  .deck .in{padding:12px 12px 14px}
+  .deck h3{font-size:16px}
+  .deck .cnt{font-size:11px}
+  .two{grid-template-columns:1fr}
+  .study-top{row-gap:4px}
+  .study-top .counts{order:3; width:100%}
+  .actions{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+  .actions .btn{width:100%; padding-left:10px; padding-right:10px; font-size:14px; line-height:1.35}
+  .actions .btn.big{grid-column:1/-1; font-size:16px}
+  .clist li{grid-template-columns:1fr; gap:4px}
+  .clist .meta{justify-content:flex-start}
+  .hero{margin:28px 0 28px}
+}
+@media (hover:none) and (pointer:coarse){ .keys{display:none} }
+@media (prefers-reduced-motion:reduce){ *{animation:none!important; transition:none!important} }
+</style>
+</head>
+<body>
+<main id="app" aria-live="polite"></main>
+<dialog id="dlg"></dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+"use strict";
+const MIN = 60000, DAY = 86400000;
+const STEPS = [1, 10];
+const NEW_PER_DAY = 20;
+const LEARN_AHEAD = 20 * MIN;
+const KEY = "mochicard-genki-v1";
+const COLORS = ["pink","butter","mint","sky","lilac"];
+
+const $ = s => document.querySelector(s);
+const app = $("#app"), dlg = $("#dlg");
+const uid = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const nl = s => esc(s).replace(/\n/g, "<br>");
+const dayKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const startOfToday = () => { const d = new Date(); d.setHours(0,0,0,0); return d.getTime(); };
+const endOfToday = () => startOfToday() + DAY - 1;
+
+/* ---------- strings ---------- */
+const STR = {
+  en: {
+    app: "Aaron’s Card",
+    today: n => `Today<b>${n}</b>`,
+    streak: n => `<b>${n}</b>day streak`,
+    langBtn: "日本語",
+    kindV: "Verbs", kindA: "Adjectives",
+    conjFlip: "Practice with cards", conjDoneT: "Conjugation done for today", backConj: "Back to conjugation",
+    voiceBtn: "Voice", voiceT: "Voice settings", voiceSel: "Voice", voiceAuto: "Auto (best available)",
+    voiceRate: "Speed", voiceSrc: "Read from", srcKanji: "Kanji (more natural accent)", srcKana: "Reading (never misreads)",
+    voiceTest: "Test", voiceNone: "No Japanese voice was found on this device. Add one in your phone’s settings (see the tip below).",
+    voiceTip: "For a more natural voice — iPhone: Settings › Accessibility › Spoken Content › Voices › Japanese, download an “Enhanced” or “Premium” voice. Android: install Google’s Speech Services and download the Japanese voice data.",
+    testText: "こんにちは。日本語の勉強、がんばりましょう。",
+    heroEmpty: "Make a deck and add the words from your lesson",
+    heroEmptySub: "New to Japanese? Start with the hiragana deck",
+    heroDone: "All caught up for today",
+    heroDoneSub: "See you tomorrow. またあした。",
+    heroDue: n => `${n} cards due today`,
+    heroDueSub: "Each card comes back just as you’re about to forget it.",
+    decks: "Decks", newDeck: "+ New deck",
+    cNew: "New", cLearn: "Learning", cRev: "Review",
+    toDecks: "‹ Decks",
+    jpEn: "Japanese → English", enJp: "English → Japanese",
+    study: "Start studying", studyNone: "Done for today",
+    addCard: "Add a card", bulk: "Add many", settings: "Deck settings",
+    cardsN: n => `${n} cards`,
+    search: "Search cards",
+    allLessons: "All lessons",
+    lesson: n => `Lesson ${n}`,
+    notFound: "No matching cards",
+    noCards: "No cards yet. Tap “Add a card” to make one",
+    sNew: "New", sLearn: "Learning", sToday: "Today", sDays: n => `In ${n}d`,
+    edit: "Edit", del: "Delete",
+    quit: "‹ Quit",
+    tap: "Tap to flip", show: "Show answer",
+    rates: ["Again","Hard","Good","Easy"],
+    keys: "Keys: Space to flip / 1–4 to answer / P to hear it",
+    react: ["Again soon","Almost","Good","Perfect"],
+    doneT: "Session complete", doneS: n => `You reviewed ${n} cards this session`,
+    backHome: "Back to decks", viewDeck: "View this deck",
+    deckNew: "New deck", deckName: "Name", deckNamePh: "e.g. Lesson 3 vocab",
+    color: "Color", dir: "Front of the card",
+    showRd: "Show the reading (hiragana) on the front",
+    autoplay: "Play audio when the answer is shown",
+    create: "Create", save: "Save", cancel: "Cancel", close: "Close",
+    delDeck: "Delete deck",
+    delDeckMsg: (n, c) => `This deletes “${n}” and its ${c} cards. You can’t undo this.`,
+    delCard: "Delete card", delCardMsg: n => `This deletes the card “${n}”.`,
+    nameReq: "Enter a name", created: "Deck created", saved: "Saved", deleted: "Deleted",
+    editCard: "Edit card",
+    fJp: "Japanese", fJpPh: "食べる",
+    fRd: "Reading (hiragana)", fRdPh: "たべる",
+    fMean: "Meaning", fMeanPh: "to eat",
+    fLesson: "Lesson (optional)", fNote: "Note (optional)", fNotePh: "ru-verb",
+    add: "Add", addHint: "Ctrl+Enter also adds",
+    bothReq: "Enter the Japanese and the meaning",
+    added: n => `Added (${n} cards)`,
+    bulkHelp: "One card per line: Japanese, reading, meaning, lesson, word type. Separate them with tabs (paste columns from a spreadsheet) or commas. Everything after the meaning is optional. Word types: ru, u, irr, i, na.",
+    bulkPh: "食べる\tたべる\tto eat\t3\tru\n犬,いぬ,dog\nねこ,cat",
+    nCards: n => `${n} cards`,
+    noRows: "No lines could be read", bulkAdded: n => `Added ${n} cards`,
+    listen: "Play audio",
+    typeStudy: "Type the answer",
+    typePh: "Type in hiragana (romaji works too)",
+    check: "Check",
+    correct: "Correct",
+    wrong: "Not quite. You typed",
+    typeKeys: "Enter to check, then Enter again for the highlighted button (or 1–4)",
+    conj: "Conjugation practice",
+    conjNone: "Set a word type on your verbs and adjectives first",
+    conjNoneSub: "Edit a card and choose “Word type”, or add it as a 5th column in “Add many”",
+    conjWordsN: n => `${n} words`,
+    verbForms: "Verb forms", adjForms: "Adjective forms", qCount: "Questions",
+    startConj: "Start", pickOne: "Pick at least one form that fits these words",
+    next: "Next", again: "Try again",
+    scoreT: (a, b) => `${a} / ${b} correct`,
+    perfectMsg: "No mistakes.",
+    missed: "Needs review",
+    conjKeys: "Enter to check, Enter again for the next question",
+    fWtype: "Word type (for conjugation)",
+    wtypes: { "": "Other", ru: "る-verb", u: "う-verb", irr: "Irregular verb", i: "い-adjective", na: "な-adjective" },
+    wshort: { ru: "る-v", u: "う-v", irr: "irr-v", i: "い-adj", na: "な-adj" },
+    forms: { masu: "ます form", masen: "polite negative (〜ません)", mashita: "polite past (〜ました)", masendeshita: "polite past negative",
+      te: "て-form", nai: "short negative (〜ない)", ta: "short past (〜た)", nakatta: "short past negative", tai: "want to (〜たい)",
+      vol: "volitional (〜よう)", pot: "potential", ba: "conditional (〜ば)", pass: "passive", caus: "causative",
+      a_neg: "negative", a_past: "past", a_pastneg: "past negative", a_te: "て-form" },
+    verbs: "Verbs & adjectives (sample)",
+    hira: "Hiragana", kata: "Katakana", nums: "Numbers 1–10"
+  },
+  ja: {
+    app: "Aaron’s Card",
+    today: n => `今日<b>${n}</b>枚`,
+    streak: n => `<b>${n}</b>日つづいてる`,
+    langBtn: "English",
+    kindV: "動詞", kindA: "形容詞",
+    conjFlip: "カードで練習", conjDoneT: "今日の活用練習は完了です", backConj: "活用練習にもどる",
+    voiceBtn: "音声", voiceT: "音声の設定", voiceSel: "声", voiceAuto: "自動（いちばん良い声）",
+    voiceRate: "速さ", voiceSrc: "読み上げに使う文字", srcKanji: "漢字（アクセントが自然）", srcKana: "読み（読み間違いがない）",
+    voiceTest: "試しに聞く", voiceNone: "この端末に日本語の声が見つかりません。下のヒントを参考に追加してください。",
+    voiceTip: "もっと自然な声にするには、iPhone：設定 › アクセシビリティ › 読み上げコンテンツ › 声 › 日本語 で「拡張」や「プレミアム」の声をダウンロード。Android：「Google 音声サービス」を入れて日本語の音声データをダウンロード。",
+    testText: "こんにちは。日本語の勉強、がんばりましょう。",
+    heroEmpty: "デッキを作って、課の単語を登録しましょう",
+    heroEmptySub: "初めての方は、ひらがなのデッキから始められます。",
+    heroDone: "今日の学習はすべて完了しました",
+    heroDoneSub: "また明日。",
+    heroDue: n => `今日の学習は ${n}枚`,
+    heroDueSub: "忘れかけたころに、もう一度出題します。",
+    decks: "デッキ", newDeck: "＋ 新しいデッキ",
+    cNew: "新規", cLearn: "学習中", cRev: "復習",
+    toDecks: "‹ デッキ一覧",
+    jpEn: "日本語 → 英語", enJp: "英語 → 日本語",
+    study: "学習をはじめる", studyNone: "今日の分は完了",
+    addCard: "カードを追加", bulk: "まとめて追加", settings: "デッキ設定",
+    cardsN: n => `カード ${n}枚`,
+    search: "カードを探す",
+    allLessons: "すべての課",
+    lesson: n => `第${n}課`,
+    notFound: "見つかりませんでした",
+    noCards: "まだカードがありません。「カードを追加」から作成できます",
+    sNew: "新規", sLearn: "学習中", sToday: "今日", sDays: n => `${n}日後`,
+    edit: "編集", del: "削除",
+    quit: "‹ やめる",
+    tap: "タップでめくる", show: "答えを見る",
+    rates: ["もう一度","むずかしい","ふつう","かんたん"],
+    keys: "キーボード：スペースでめくる ／ 1〜4 で答える ／ P で音声",
+    react: ["また出題します","あと少し","いいですね","完璧です"],
+    doneT: "おつかれさまでした", doneS: n => `このセッションで ${n}枚 復習しました`,
+    backHome: "デッキ一覧へ", viewDeck: "このデッキを見る",
+    deckNew: "新しいデッキ", deckName: "名前", deckNamePh: "例：第3課の単語",
+    color: "色", dir: "カードの表に出すもの",
+    showRd: "表に読み（ひらがな）を表示する",
+    autoplay: "答えを見たときに音声を流す",
+    create: "作成する", save: "保存する", cancel: "やめる", close: "閉じる",
+    delDeck: "デッキを削除",
+    delDeckMsg: (n, c) => `「${n}」とカード${c}枚を削除します。元に戻せません。`,
+    delCard: "カードを削除", delCardMsg: n => `「${n}」のカードを削除します。`,
+    nameReq: "名前を入れてください", created: "デッキを作成しました", saved: "保存しました", deleted: "削除しました",
+    editCard: "カードを編集",
+    fJp: "日本語", fJpPh: "食べる",
+    fRd: "読み（ひらがな）", fRdPh: "たべる",
+    fMean: "意味", fMeanPh: "to eat",
+    fLesson: "課（なくてもOK）", fNote: "メモ（なくてもOK）", fNotePh: "る動詞",
+    add: "追加する", addHint: "Ctrl+Enter でも追加できます",
+    bothReq: "日本語と意味を入れてください",
+    added: n => `追加しました（${n}枚）`,
+    bulkHelp: "1行に1枚：日本語、読み、意味、課、品詞。タブ（スプレッドシートの列を貼りつけ）かカンマで区切ります。意味より後ろは省略できます。品詞は ru / u / irr / i / na（る・う・する・い・な でもOK）。",
+    bulkPh: "食べる\tたべる\tto eat\t3\tru\n犬,いぬ,dog\nねこ,cat",
+    nCards: n => `${n}枚`,
+    noRows: "読み取れる行がありません", bulkAdded: n => `${n}枚 追加しました`,
+    listen: "音声を聞く",
+    typeStudy: "入力で学習",
+    typePh: "ひらがなで入力（ローマ字でもOK）",
+    check: "答え合わせ",
+    correct: "正解",
+    wrong: "不正解。あなたの答え",
+    typeKeys: "Enter で答え合わせ、もう一度 Enter で光っているボタン（1〜4 でもOK）",
+    conj: "活用練習",
+    conjNone: "動詞・形容詞のカードに品詞を設定してください",
+    conjNoneSub: "カードの編集で「品詞」を選ぶか、「まとめて追加」の5列目に書けます",
+    conjWordsN: n => `対象の単語 ${n}個`,
+    verbForms: "動詞の形", adjForms: "形容詞の形", qCount: "問題数",
+    startConj: "はじめる", pickOne: "使える形を1つ以上選んでください",
+    next: "つぎへ", again: "もう一回",
+    scoreT: (a, b) => `${b}問中 ${a}問 せいかい`,
+    perfectMsg: "全問正解です",
+    missed: "復習が必要な項目",
+    conjKeys: "Enter で答え合わせ、もう一度 Enter でつぎへ",
+    fWtype: "品詞（活用練習用）",
+    wtypes: { "": "そのほか", ru: "る動詞", u: "う動詞", irr: "不規則動詞", i: "い形容詞", na: "な形容詞" },
+    wshort: { ru: "る動詞", u: "う動詞", irr: "不規則", i: "い形", na: "な形" },
+    forms: { masu: "ます形", masen: "〜ません", mashita: "〜ました", masendeshita: "〜ませんでした",
+      te: "て形", nai: "ない形", ta: "た形", nakatta: "〜なかった", tai: "〜たい",
+      vol: "意向形（〜よう）", pot: "可能形", ba: "〜ば（条件）", pass: "受身形", caus: "使役形",
+      a_neg: "否定形", a_past: "過去形", a_pastneg: "過去否定形", a_te: "て形" },
+    verbs: "動詞と形容詞（サンプル）",
+    hira: "ひらがな", kata: "カタカナ", nums: "数字 1〜10"
+  }
+};
+
+/* ---------- data ---------- */
+function newCard(jp, reading, meaning, lesson = null, note = "", wtype = ""){
+  return { id: uid(), jp, reading, meaning, lesson, note, wtype,
+    state: "new", due: 0, interval: 0, ease: 2.5, step: 0, reps: 0, lapses: 0, created: Date.now() };
+}
+const ROMAJI = "a i u e o ka ki ku ke ko sa shi su se so ta chi tsu te to na ni nu ne no ha hi fu he ho ma mi mu me mo ya yu yo ra ri ru re ro wa o(wo) n".split(" ");
+const HIRA = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん";
+const KATA = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+function kanaDeck(name, kana, color){
+  const t = Date.now();
+  return { id: uid(), name, color, dir: "jp-en", showRd: false, autoplay: true, newLog: null,
+    cards: [...kana].map((k, i) => Object.assign(newCard(k, "", ROMAJI[i]), { created: t + i })) };
+}
+const VERB_SAMPLE = [
+  ["食べる","たべる","to eat","ru"],["見る","みる","to see","ru"],["起きる","おきる","to get up","ru"],
+  ["飲む","のむ","to drink","u"],["行く","いく","to go","u"],["帰る","かえる","to go home","u"],["書く","かく","to write","u"],
+  ["話す","はなす","to speak","u"],["待つ","まつ","to wait","u"],["泳ぐ","およぐ","to swim","u"],["遊ぶ","あそぶ","to play","u"],["買う","かう","to buy","u"],
+  ["する","する","to do","irr"],["来る","くる","to come","irr"],["勉強する","べんきょうする","to study","irr"],
+  ["大きい","おおきい","big","i"],["高い","たかい","expensive; tall","i"],["いい","いい","good","i"],
+  ["静か","しずか","quiet","na"],["元気","げんき","healthy; energetic","na"],["好き","すき","to like; fond of","na"]
+];
+function sampleDb(lang){
+  const s = STR[lang];
+  const nums = [["一","いち","one"],["二","に","two"],["三","さん","three"],["四","よん / し","four"],["五","ご","five"],
+    ["六","ろく","six"],["七","なな / しち","seven"],["八","はち","eight"],["九","きゅう / く","nine"],["十","じゅう","ten"]];
+  const t = Date.now();
+  return {
+    settings: { lang },
+    decks: [
+      kanaDeck(s.hira, HIRA, "pink"),
+      kanaDeck(s.kata, KATA, "sky"),
+      { id: uid(), name: s.nums, color: "butter", dir: "jp-en", showRd: false, autoplay: true, newLog: null,
+        cards: nums.map((n, i) => Object.assign(newCard(n[0], n[1], n[2]), { created: t + i })) },
+      { id: uid(), name: s.verbs, color: "lilac", dir: "en-jp", showRd: true, autoplay: true, newLog: null,
+        cards: VERB_SAMPLE.map((n, i) => Object.assign(newCard(n[0], n[1], n[2], null, "", n[3]), { created: t + i })) }
+    ],
+    stats: { log: {} }
+  };
+}
+function load(){
+  try { const s = localStorage.getItem(KEY); if (s) return JSON.parse(s); } catch (e) {}
+  const lang = (navigator.language || "en").startsWith("ja") ? "ja" : "en";
+  return sampleDb(lang);
+}
+let db = load();
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) {} }
+const T = () => STR[db.settings.lang] || STR.en;
+const getDeck = id => db.decks.find(d => d.id === id);
+
+/* ---------- scheduler (SM-2ベース) ---------- */
+function schedule(card, r, now = Date.now()){
+  const c = { ...card };
+  if (c.state === "new" || c.state === "learning"){
+    if (c.state === "new"){ c.state = "learning"; c.step = 0; }
+    if (r === 1){ c.step = 0; c.due = now + STEPS[0]*MIN; }
+    else if (r === 2){ const m = c.step === 0 ? Math.round((STEPS[0]+STEPS[1])/2) : STEPS[c.step]; c.due = now + m*MIN; }
+    else if (r === 3){
+      c.step++;
+      if (c.step >= STEPS.length){ c.state = "review"; c.interval = 1; c.due = startOfToday() + DAY; }
+      else c.due = now + STEPS[c.step]*MIN;
+    } else { c.state = "review"; c.interval = 4; c.due = startOfToday() + 4*DAY; }
+  } else if (c.state === "relearning"){
+    if (r === 1) c.due = now + 10*MIN;
+    else if (r === 2) c.due = now + 15*MIN;
+    else {
+      if (r === 4) c.interval = Math.max(c.interval + 1, Math.round(c.interval * 1.5));
+      c.state = "review"; c.due = startOfToday() + c.interval*DAY;
+    }
+  } else {
+    if (r === 1){
+      c.lapses++; c.ease = Math.max(1.3, c.ease - 0.2);
+      c.interval = Math.max(1, Math.round(c.interval * 0.5));
+      c.state = "relearning"; c.due = now + 10*MIN;
+    } else {
+      if (r === 2){ c.ease = Math.max(1.3, c.ease - 0.15); c.interval = Math.max(c.interval + 1, Math.round(c.interval * 1.2)); }
+      else if (r === 3){ c.interval = Math.max(c.interval + 1, Math.round(c.interval * c.ease)); }
+      else { c.ease += 0.15; c.interval = Math.max(c.interval + 2, Math.round(c.interval * c.ease * 1.3)); }
+      c.due = startOfToday() + c.interval*DAY;
+    }
+  }
+  c.reps++;
+  return c;
+}
+function fmtIv(card, r){
+  const ja = db.settings.lang === "ja", now = Date.now(), n = schedule(card, r, now);
+  if (n.state === "review"){
+    const d = n.interval;
+    if (d < 30) return ja ? `${d}日` : `${d}d`;
+    if (d < 365){ const m = (d/30).toFixed(1).replace(/\.0$/,""); return ja ? `${m}ヶ月` : `${m}mo`; }
+    const y = (d/365).toFixed(1).replace(/\.0$/,""); return ja ? `${y}年` : `${y}y`;
+  }
+  const m = Math.max(1, Math.round((n.due - now)/MIN));
+  return m < 60 ? (ja ? `${m}分` : `${m}m`) : (ja ? `${Math.round(m/60)}時間` : `${Math.round(m/60)}h`);
+}
+function newLeft(deck){
+  const k = dayKey();
+  return (!deck.newLog || deck.newLog.date !== k) ? NEW_PER_DAY : Math.max(0, NEW_PER_DAY - deck.newLog.n);
+}
+const inLesson = (c, l) => l == null || c.lesson === l;
+function counts(deck, lesson = null){
+  const now = Date.now(), eod = endOfToday();
+  let learn = 0, rev = 0, nw = 0;
+  for (const c of deck.cards){
+    if (!inLesson(c, lesson)) continue;
+    if (c.state === "new") nw++;
+    else if (c.state === "review"){ if (c.due <= eod) rev++; }
+    else if (c.due <= now + LEARN_AHEAD) learn++;
+  }
+  return { learn, rev, nw: Math.min(nw, newLeft(deck)) };
+}
+function nextCard(deck, lesson, lastId){
+  const now = Date.now(), eod = endOfToday();
+  const by = (a, b) => a.due - b.due;
+  const pool = deck.cards.filter(c => inLesson(c, lesson));
+  const learning = pool.filter(c => c.state === "learning" || c.state === "relearning");
+  const dueLearn = learning.filter(c => c.due <= now).sort(by);
+  if (dueLearn.length) return dueLearn[0];
+  const dueRev = pool.filter(c => c.state === "review" && c.due <= eod).sort(by);
+  if (dueRev.length) return dueRev[0];
+  if (newLeft(deck) > 0){
+    const nw = pool.filter(c => c.state === "new").sort((a, b) => a.created - b.created);
+    if (nw.length) return nw[0];
+  }
+  const ahead = learning.filter(c => c.due <= now + LEARN_AHEAD).sort(by);
+  return ahead.find(c => c.id !== lastId) || ahead[0] || null;
+}
+function streak(){
+  const log = db.stats.log; let d = new Date(), n = 0;
+  if (!log[dayKey(d)]) d.setDate(d.getDate() - 1);
+  while (log[dayKey(d)] > 0){ n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+
+/* ---------- romaji → kana ---------- */
+const ROMA = (() => {
+  const t = { a:"あ", i:"い", u:"う", e:"え", o:"お" };
+  const rows = { k:"かきくけこ", g:"がぎぐげご", s:"さしすせそ", z:"ざじずぜぞ", t:"たちつてと", d:"だぢづでど", n:"なにぬねの",
+    h:"はひふへほ", b:"ばびぶべぼ", p:"ぱぴぷぺぽ", m:"まみむめも", r:"らりるれろ", c:"かしくせこ" };
+  for (const [c, ks] of Object.entries(rows)) [..."aiueo"].forEach((v, i) => t[c + v] = ks[i]);
+  Object.assign(t, { ya:"や", yu:"ゆ", yo:"よ", ye:"いぇ", wa:"わ", wi:"うぃ", we:"うぇ", wo:"を",
+    shi:"し", chi:"ち", tsu:"つ", fu:"ふ", ji:"じ",
+    fa:"ふぁ", fi:"ふぃ", fe:"ふぇ", fo:"ふぉ", ja:"じゃ", ju:"じゅ", jo:"じょ", je:"じぇ",
+    sha:"しゃ", shu:"しゅ", sho:"しょ", she:"しぇ", cha:"ちゃ", chu:"ちゅ", cho:"ちょ", che:"ちぇ",
+    thi:"てぃ", dhi:"でぃ", vu:"ゔ", va:"ゔぁ", vi:"ゔぃ", ve:"ゔぇ", vo:"ゔぉ",
+    xa:"ぁ", xi:"ぃ", xu:"ぅ", xe:"ぇ", xo:"ぉ", la:"ぁ", li:"ぃ", lu:"ぅ", le:"ぇ", lo:"ぉ",
+    xya:"ゃ", xyu:"ゅ", xyo:"ょ", lya:"ゃ", lyu:"ゅ", lyo:"ょ", xtu:"っ", ltu:"っ", xtsu:"っ", ltsu:"っ", "-":"ー" });
+  const yo = { k:"き", g:"ぎ", s:"し", z:"じ", j:"じ", t:"ち", c:"ち", d:"ぢ", n:"に", h:"ひ", b:"び", p:"ぴ", m:"み", r:"り" };
+  for (const [c, k] of Object.entries(yo)){ t[c + "ya"] = k + "ゃ"; t[c + "yu"] = k + "ゅ"; t[c + "yo"] = k + "ょ"; }
+  return t;
+})();
+const ROMA_KEYS = Object.keys(ROMA);
+function toKana(str, final = false){
+  const s = String(str).toLowerCase(); let out = "", i = 0;
+  while (i < s.length){
+    const c = s[i];
+    if (!/[a-z'\-]/.test(c)){ out += c; i++; continue; }
+    if (c === "n"){
+      const nx = s[i+1];
+      if (nx === undefined){ out += final ? "ん" : "n"; i++; continue; }
+      if (nx === "'"){ out += "ん"; i += 2; continue; }
+      if (nx === "n"){
+        const n2 = s[i+2];
+        if (n2 === undefined){ out += final ? "ん" : "nn"; i += 2; continue; }
+        if (/[aiueoy]/.test(n2)){ out += "ん"; i++; continue; }
+        out += "ん"; i += 2; continue;
+      }
+      if (!/[aiueoy]/.test(nx)){ out += "ん"; i++; continue; }
+    }
+    if (c === s[i+1] && /[bcdfghjkmpqrstvwxz]/.test(c)){ out += "っ"; i++; continue; }
+    let hit = false;
+    for (let L = 4; L >= 1; L--){
+      const ch = s.substr(i, L);
+      if (ch.length === L && ROMA[ch]){ out += ROMA[ch]; i += L; hit = true; break; }
+    }
+    if (hit) continue;
+    const rest = s.slice(i);
+    if (!final && ROMA_KEYS.some(k => k.startsWith(rest))){ out += rest; break; }
+    out += c; i++;
+  }
+  return out;
+}
+const kataToHira = s => s.replace(/[\u30a1-\u30f6]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
+const norm = s => kataToHira(toKana(String(s).normalize("NFKC"), true)).replace(/[\s、。・,.!！?？〜~「」]/g, "");
+const splitAlts = s => String(s || "").split(/[\/／;；]/).map(x => x.trim()).filter(Boolean);
+function answersOf(card){
+  const alts = [];
+  for (const a of [...splitAlts(card.reading), ...splitAlts(card.jp)]){
+    alts.push(a);
+    if (/[()（）]/.test(a)){ alts.push(a.replace(/[()（）]/g, "")); alts.push(a.replace(/[（(][^）)]*[）)]/g, "")); }
+  }
+  return new Set(alts.map(norm).filter(Boolean));
+}
+
+/* ---------- conjugation ---------- */
+const VF = ["masu","masen","mashita","masendeshita","te","nai","ta","nakatta","tai","vol","pot","ba","pass","caus"];
+const AF = ["a_neg","a_past","a_pastneg","a_te"];
+const isVerb = c => ["ru","u","irr"].includes(c.wtype);
+const isAdj = c => ["i","na"].includes(c.wtype);
+const GODAN = { "う":"わいうえお", "く":"かきくけこ", "ぐ":"がぎぐげご", "す":"さしすせそ", "つ":"たちつてと", "ぬ":"なにぬねの", "ぶ":"ばびぶべぼ", "む":"まみむめも", "る":"らりるれろ" };
+const TE = { "う":"って", "つ":"って", "る":"って", "む":"んで", "ぶ":"んで", "ぬ":"んで", "く":"いて", "ぐ":"いで", "す":"して" };
+function verbTable(r, jp, type){
+  let pre, f;
+  if (type === "irr"){
+    if (r.endsWith("する")){ pre = r.slice(0, -2);
+      f = { masu:"します", nai:"しない", ta:"した", te:"して", tai:"したい", vol:"しよう", pot:"できる", ba:"すれば", pass:"される", caus:"させる" };
+    } else if (r.endsWith("くる")){ pre = r.slice(0, -2);
+      f = { masu:"きます", nai:"こない", ta:"きた", te:"きて", tai:"きたい", vol:"こよう", pot:["こられる","これる"], ba:"くれば", pass:"こられる", caus:"こさせる" };
+    } else return null;
+  } else if (type === "ru"){
+    if (!r.endsWith("る")) return null;
+    pre = r.slice(0, -1);
+    f = { masu:"ます", nai:"ない", ta:"た", te:"て", tai:"たい", vol:"よう", pot:["られる","れる"], ba:"れば", pass:"られる", caus:"させる" };
+  } else {
+    const e = r.slice(-1), row = GODAN[e]; if (!row) return null;
+    pre = r.slice(0, -1);
+    const a = e === "う" ? "わ" : row[0], i = row[1], ee = row[3], o = row[4];
+    const te = (r === "いく" || /行く$/.test(jp)) ? "って" : TE[e];
+    f = { masu:i+"ます", nai:a+"ない", ta:te.replace(/て$/,"た").replace(/で$/,"だ"), te, tai:i+"たい", vol:o+"う", pot:ee+"る", ba:ee+"ば", pass:a+"れる", caus:a+"せる" };
+  }
+  const out = {};
+  for (const [k, v] of Object.entries(f)) out[k] = [].concat(v).map(x => pre + x);
+  out.masen = out.masu.map(x => x.replace(/ます$/, "ません"));
+  out.mashita = out.masu.map(x => x.replace(/ます$/, "ました"));
+  out.masendeshita = out.masu.map(x => x.replace(/ます$/, "ませんでした"));
+  out.nakatta = out.nai.map(x => x.replace(/ない$/, "なかった"));
+  if (type === "u" && r === "ある"){ out.nai = ["ない"]; out.nakatta = ["なかった"]; }
+  return out;
+}
+function adjTable(r, type){
+  if (type === "i"){
+    if (!r.endsWith("い")) return null;
+    const st = r.endsWith("いい") ? r.slice(0, -2) + "よ" : r.slice(0, -1);
+    return { a_neg:[st+"くない"], a_past:[st+"かった"], a_pastneg:[st+"くなかった"], a_te:[st+"くて"] };
+  }
+  return { a_neg:[r+"じゃない", r+"ではない"], a_past:[r+"だった"], a_pastneg:[r+"じゃなかった", r+"ではなかった"], a_te:[r+"で"] };
+}
+function toJp(jp, r, full, type){
+  if (jp === r) return full;
+  if (type === "irr" && /くる$/.test(r) && /来る$/.test(jp)) return jp.slice(0, -1) + full.slice(r.length - 1);
+  let k = 0;
+  while (k < jp.length && k < r.length && jp[jp.length-1-k] === r[r.length-1-k]) k++;
+  const rStem = r.slice(0, r.length - k), jStem = jp.slice(0, jp.length - k);
+  return full.startsWith(rStem) ? jStem + full.slice(rStem.length) : full;
+}
+const baseOf = c => { const j = splitAlts(c.jp)[0] || c.jp; return c.wtype === "na" ? j.replace(/な$/, "") : j; };
+function conjugate(card, form){
+  let r = splitAlts(card.reading)[0] || splitAlts(card.jp)[0] || "", jp = baseOf(card);
+  if (card.wtype === "na") r = r.replace(/な$/, "");
+  r = kataToHira(r);
+  const tbl = isVerb(card) ? verbTable(r, jp, card.wtype) : isAdj(card) ? adjTable(r, card.wtype) : null;
+  const full = tbl && tbl[form]; if (!full || !full.length) return null;
+  const jps = full.map(f => toJp(jp, r, f, card.wtype));
+  return { reading: full[0], jp: jps[0], answers: new Set([...full, ...jps].map(norm)) };
+}
+const RU_AS_U = ["帰る","入る","知る","切る","走る","要る","減る","限る","喋る","滑る","蹴る","握る","参る","散る","焦る","茂る"];
+const ONE_KANJI_RU = ["見る","寝る","着る","出る","居る","似る","煮る","得る","経る"];
+function guessType(r, jp){
+  const k = /[\u4e00-\u9faf]/;
+  if (/する$/.test(r) || (r === "くる" || /来る$/.test(jp))) return "irr";
+  if (!k.test(jp)) return "";
+  if (RU_AS_U.some(w => jp.endsWith(w))) return "u";
+  if (ONE_KANJI_RU.some(w => jp.endsWith(w)) && jp.length <= 3) return "ru";
+  if (/る$/.test(jp)){
+    const prev = jp.slice(-2, -1);
+    if (/[いきしちにひみりぎじびぴえけせてねへめれげぜべぺ]/.test(prev)) return "ru";
+    return "u";
+  }
+  if (/[\u4e00-\u9faf][うくぐすつぬぶむ]$/.test(jp)) return "u";
+  if (/[\u4e00-\u9faf][ぁ-ん]*い$/.test(jp)) return "i";
+  return "";
+}
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+/* ---------- audio ---------- */
+const canSpeak = "speechSynthesis" in window;
+function voiceSettings(){
+  if (!db.settings.voice) db.settings.voice = { name: "", rate: 1, src: "kanji" };
+  return db.settings.voice;
+}
+function jaVoices(){
+  try { return speechSynthesis.getVoices().filter(v => v.lang && v.lang.replace("_","-").toLowerCase().startsWith("ja")); } catch (e) { return []; }
+}
+function voiceScore(v){
+  const n = v.name.toLowerCase(); let s = 0;
+  if (/enhanced|premium|natural|neural|online|拡張|高品質|プレミアム/.test(n)) s += 4;
+  if (/google/.test(n)) s += 3;
+  if (/nanami|keita|kyoko|otoya|o-ren|hattori|sakura/.test(n)) s += 1;
+  if (/compact|eloquence|grandma|grandpa|shelley|rocko|flo|reed|sandy/.test(n)) s -= 3;
+  return s;
+}
+function pickVoice(){
+  const list = jaVoices(), want = voiceSettings().name;
+  return list.find(v => v.name === want) || list.slice().sort((a, b) => voiceScore(b) - voiceScore(a))[0] || null;
+}
+function speakPair(jp, reading){
+  const src = voiceSettings().src, k = /[\u4e00-\u9faf]/;
+  const j = splitAlts(jp)[0] || "", r = splitAlts(reading)[0] || "";
+  speakText(src === "kanji" && k.test(j) ? j : (r || j));
+}
+function speak(card){ if (card) speakPair(card.jp, card.reading); }
+function speakText(text){
+  if (!canSpeak || !text) return;
+  try {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "ja-JP"; u.rate = voiceSettings().rate; u.pitch = 1;
+    const v = pickVoice(); if (v) u.voice = v;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  } catch (e) {}
+}
+if (canSpeak) try { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => { if (dlg.open && $("#f-voice")) voiceDialog(); }; } catch (e) {}
+const SPK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg>`;
+
+/* ---------- mascot ---------- */
+function mochi(mood = "idle", cls = ""){
+  const S = 'stroke="#2E2246" stroke-width="3" stroke-linecap="round" fill="none"';
+  const eyes = {
+    idle:  `<ellipse cx="38" cy="54" rx="3.6" ry="4.4" fill="#2E2246"/><ellipse cx="62" cy="54" rx="3.6" ry="4.4" fill="#2E2246"/>`,
+    happy: `<path d="M33 55 q5 -7 10 0" ${S}/><path d="M57 55 q5 -7 10 0" ${S}/>`,
+    wow:   `<circle cx="38" cy="53" r="5.5" fill="#2E2246"/><circle cx="62" cy="53" r="5.5" fill="#2E2246"/><circle cx="39.8" cy="51" r="1.8" fill="#fff"/><circle cx="63.8" cy="51" r="1.8" fill="#fff"/>`,
+    dizzy: `<path d="M34 50 l8 8 M42 50 l-8 8" ${S}/><path d="M58 50 l8 8 M66 50 l-8 8" ${S}/>`
+  }[mood];
+  const mouth = {
+    idle:  `<path d="M46 62 q4 4 8 0" ${S}/>`,
+    happy: `<path d="M43 61 q7 9 14 0 z" fill="#E85D8A" stroke="#2E2246" stroke-width="2.5" stroke-linejoin="round"/>`,
+    wow:   `<ellipse cx="50" cy="64" rx="3.4" ry="4" fill="#2E2246"/>`,
+    dizzy: `<path d="M42 64 q2 -3 4 0 q2 3 4 0 q2 -3 4 0 q2 3 4 0" ${S} stroke-width="2.5"/>`
+  }[mood];
+  return `<svg class="mochi ${cls}" viewBox="0 0 100 100" aria-hidden="true">
+    <ellipse cx="50" cy="92" rx="30" ry="4" fill="#2E2246" opacity=".12"/>
+    <path d="M50 22 C78 22 93 44 93 64 C93 83 75 90 50 90 C25 90 7 83 7 64 C7 44 22 22 50 22Z" fill="var(--mochi)" stroke="#2E2246" stroke-width="3"/>
+    <path d="M51 23 c-1 -11 9 -16 17 -13 c-2 10 -9 14 -17 13z" fill="var(--mint)" stroke="#2E2246" stroke-width="2.5" stroke-linejoin="round"/>
+    <ellipse cx="27" cy="64" rx="7" ry="4.5" fill="var(--cheek)" opacity=".75"/>
+    <ellipse cx="73" cy="64" rx="7" ry="4.5" fill="var(--cheek)" opacity=".75"/>
+    ${eyes}${mouth}
+  </svg>`;
+}
+
+/* ---------- ui helpers ---------- */
+let toastT;
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 1600);
+}
+function openDialog(html, mount){
+  dlg.innerHTML = html; dlg.showModal(); mount && mount(dlg);
+  const f = dlg.querySelector("[autofocus]"); f && f.focus();
+}
+const closeDialog = () => dlg.close();
+function cntPills(c, cls = ""){
+  const s = T(), p = (n, k, label) => `<span class="cnt ${n ? k : "zero"}">${label} ${n}</span>`;
+  return `<div class="counts ${cls}">${p(c.nw,"new",s.cNew)}${p(c.learn,"learn",s.cLearn)}${p(c.rev,"rev",s.cRev)}</div>`;
+}
+function header(){
+  const s = T(), today = db.stats.log[dayKey()] || 0, st = streak();
+  return `<header class="top">
+    <button class="logo" data-action="home"><span class="mark" aria-hidden="true">A</span>${s.app}</button>
+    <div class="chips">
+      <span class="chip">${s.today(today)}${st ? `<span class="streak" title="${st}${db.settings.lang === "ja" ? "日つづいてる" : "-day streak"}">🔥${st}</span>` : ""}</span>
+      ${canSpeak ? `<button class="icon-round" data-action="voice" aria-label="${s.voiceT}" title="${s.voiceT}">${SPK}</button>` : ""}
+      <button class="icon-round" data-action="lang" lang="${db.settings.lang === "en" ? "ja" : "en"}" aria-label="${s.langBtn}" title="${s.langBtn}">${db.settings.lang === "en" ? "あ" : "A"}</button>
+    </div>
+  </header>`;
+}
+const isKana = c => !c.reading && /^[\u3040-\u30ff]{1,2}$/.test(c.jp);
+
+/* ---------- views ---------- */
+let view = { name: "home" };
+
+function renderHome(){
+  const s = T();
+  const total = db.decks.reduce((n, d) => { const c = counts(d); return n + c.nw + c.learn + c.rev; }, 0);
+  const anyCards = db.decks.some(d => d.cards.length);
+  let say, sub;
+  if (!anyCards){ say = s.heroEmpty; sub = s.heroEmptySub; }
+  else if (!total){ say = s.heroDone; sub = s.heroDoneSub; }
+  else { say = s.heroDue(total); sub = s.heroDueSub; }
+  app.innerHTML = `${header()}
+    <section class="hero">${mochi(total ? "idle" : "happy")}<div class="bubble">${say}<small>${sub}</small></div></section>
+    <h2 class="section-title">${s.decks}</h2>
+    <div class="grid">
+      ${db.decks.map(d => `<button class="deck" data-action="open-deck" data-id="${d.id}">
+        <div class="tab" style="background:var(--${d.color})"></div>
+        <div class="in"><h3>${esc(d.name)}</h3>${cntPills(counts(d))}</div>
+      </button>`).join("")}
+      <button class="deck add" data-action="new-deck">${s.newDeck}</button>
+    </div>`;
+}
+
+function statusOf(c){
+  const s = T();
+  if (c.state === "new") return s.sNew;
+  if (c.state !== "review") return s.sLearn;
+  if (c.due <= endOfToday()) return s.sToday;
+  return s.sDays(Math.ceil((c.due - startOfToday())/DAY));
+}
+function renderDeck(){
+  const s = T(), d = getDeck(view.id); if (!d){ go({ name: "home" }); return; }
+  const lessons = [...new Set(d.cards.map(c => c.lesson).filter(l => l != null))].sort((a, b) => a - b);
+  if (view.lesson != null && !lessons.includes(view.lesson)) view.lesson = null;
+  const c = counts(d, view.lesson), canStudy = c.nw + c.learn + c.rev > 0, q = (view.q || "").toLowerCase();
+  const list = d.cards.filter(x => inLesson(x, view.lesson) && (!q || [x.jp, x.reading, x.meaning, x.note].join(" ").toLowerCase().includes(q)))
+    .sort((a, b) => (a.lesson ?? 99) - (b.lesson ?? 99) || a.created - b.created);
+  app.innerHTML = `${header()}
+    <div class="deck-head">
+      <button class="back" data-action="home">${s.toDecks}</button>
+      <h1>${esc(d.name)}</h1>
+      <p class="dir">${d.dir === "en-jp" ? s.enJp : s.jpEn}</p>
+      ${lessons.length ? `<div class="lessons" role="group">
+        <button class="lchip" data-action="lesson" data-l="" aria-pressed="${view.lesson == null}">${s.allLessons}</button>
+        ${lessons.map(l => `<button class="lchip" data-action="lesson" data-l="${l}" aria-pressed="${view.lesson === l}">${s.lesson(l)}</button>`).join("")}
+      </div>` : ""}
+      ${cntPills(c, "big-counts")}
+      <div class="actions">
+        <button class="btn pink big" data-action="study" ${canStudy ? "" : "disabled"}>${canStudy ? s.study : s.studyNone}</button>
+        <button class="btn mint" data-action="study" data-mode="type" ${canStudy ? "" : "disabled"}>${s.typeStudy}</button>
+        <button class="btn" data-action="conj-setup">${s.conj}</button>
+      </div>
+    </div>
+    <section class="panel">
+      <div class="row" style="justify-content:space-between;margin-bottom:8px">
+        <h2 class="section-title" style="margin:0">${s.cardsN(list.length)}</h2>
+        <div class="row">
+          <button class="btn small" data-action="add-card">${s.addCard}</button>
+          <button class="btn small" data-action="import">${s.bulk}</button>
+          <button class="btn small" data-action="edit-deck">${s.settings}</button>
+        </div>
+      </div>
+      ${d.cards.length > 5 ? `<input type="search" class="search" id="q" placeholder="${s.search}" value="${esc(view.q || "")}" aria-label="${s.search}">` : ""}
+      ${list.length ? `<ul class="clist">${list.map(x => `<li>
+          <div style="min-width:0">
+            <div class="f"><span class="jp" lang="ja">${esc(x.jp)}</span>${x.reading ? `<small lang="ja">${esc(x.reading)}</small>` : ""}</div>
+            <div class="b">${esc(x.meaning)}</div>
+          </div>
+          <div class="meta">${x.wtype ? `<span class="wbadge">${s.wshort[x.wtype]}</span>` : ""}${x.lesson != null ? `<span class="lbadge">L${x.lesson}</span>` : ""}<span class="status">${statusOf(x)}</span>
+            <button class="icon-btn" data-action="edit-card" data-id="${x.id}">${s.edit}</button>
+            <button class="icon-btn" data-action="del-card" data-id="${x.id}">${s.del}</button></div>
+        </li>`).join("")}</ul>`
+      : `<p class="empty">${d.cards.length ? s.notFound : s.noCards}</p>`}
+    </section>`;
+  const qi = $("#q");
+  if (qi) qi.addEventListener("input", e => {
+    view.q = e.target.value; const pos = e.target.selectionStart;
+    renderDeck(); const n = $("#q"); n.focus(); n.setSelectionRange(pos, pos);
+  });
+}
+
+const MOODS = ["dizzy","wow","happy","happy"];
+function faces(d, c){
+  const s = T(), kana = isKana(c);
+  const jpBig = `<div class="q jp ${kana ? "kana" : ""}" lang="ja">${nl(c.jp)}</div>`;
+  const rd = c.reading && c.reading !== c.jp ? `<div class="rd" lang="ja">${esc(c.reading)}</div>` : "";
+  const memo = c.note ? `<div class="memo">${nl(c.note)}</div>` : "";
+  const spk = canSpeak ? `<button class="spk" data-action="speak" aria-label="${s.listen}">${SPK}</button>` : "";
+  const tagMap = c.state === "new" ? [s.cNew, "sky"] : c.state === "review" ? [s.cRev, "mint"] : [s.cLearn, "pink"];
+  const tag = `<span class="tag" style="background:var(--${tagMap[1]})">${tagMap[0]}${c.lesson != null ? ` · L${c.lesson}` : ""}</span>`;
+  let front, back;
+  if (d.dir === "en-jp" || view.mode === "type"){
+    front = `${tag}<div class="q en">${nl(c.meaning)}</div>${view.mode === "type" ? "" : `<div class="hint">${s.tap}</div>`}`;
+    back = `${spk}<div class="mini en">${nl(c.meaning)}</div><hr>${rd}${jpBig}${memo}`;
+  } else {
+    front = `${tag}${spk}${d.showRd ? rd : ""}${jpBig}<div class="hint">${s.tap}</div>`;
+    back = `${spk}${rd}<div class="mini jp" lang="ja">${nl(c.jp)}</div><hr><div class="a en">${nl(c.meaning)}</div>${memo}`;
+  }
+  return { front, back };
+}
+function ratesHTML(c, rec){
+  const s = T();
+  return `<div class="rates">${s.rates.map((l, i) =>
+    `<button class="btn rate r${i+1}${rec === i+1 ? " rec" : ""}" data-action="rate" data-r="${i+1}"><span class="iv">${fmtIv(c, i+1)}</span><span class="lb">${l}</span></button>`).join("")}</div>`;
+}
+function answerBox(action){
+  const s = T();
+  return `<div class="ansbox"><input type="text" id="ans" lang="ja" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="${s.typePh}" aria-label="${s.typePh}"><button class="btn pink" data-action="${action}">${s.check}</button></div>`;
+}
+function resultHTML(ok, v, ansHtml){
+  const s = T();
+  return ok ? `<div class="result ok"><span>${s.correct}</span><span class="jp" lang="ja">${ansHtml}</span></div>`
+    : `<div class="result ng"><span>${s.wrong}: <s class="jp" lang="ja">${esc(v) || "—"}</s></span><span>→ <span class="jp" lang="ja">${ansHtml}</span></span></div>`;
+}
+function bindAnswer(onEnter){
+  const a = $("#ans"); if (!a) return;
+  a.addEventListener("input", e => { if (e.isComposing) return; const v = toKana(a.value); if (v !== a.value) a.value = v; });
+  a.addEventListener("keydown", e => { if (e.key === "Enter" && !e.isComposing){ e.preventDefault(); onEnter(); } });
+  a.focus({ preventScroll: true });
+}
+const answerLabel = c => `${esc(c.jp)}${c.reading && c.reading !== c.jp ? `（${esc(c.reading)}）` : ""}`;
+const curItem = () => view.name === "conj" ? view.pair : view.name === "study" ? view.card : null;
+const schedOf = it => view.name === "conj" ? it.st : it;
+const answersOfItem = it => view.name === "conj" ? it.res.answers : answersOf(it);
+const labelOf = it => view.name === "conj" ? `${esc(it.res.jp)}${it.res.jp !== it.res.reading ? `（${esc(it.res.reading)}）` : ""}` : answerLabel(it);
+function speakItem(it, answered){
+  if (!it) return;
+  if (view.name === "conj") answered ? speakPair(it.res.jp, it.res.reading) : speakPair(it.card.jp, it.card.reading);
+  else speak(it);
+}
+function controlsHTML(it){
+  const s = T(), sc = schedOf(it);
+  if (view.mode === "type"){
+    if (!view.flipped) return answerBox("check");
+    return resultHTML(view.typed.ok, view.typed.v, labelOf(it)) + ratesHTML(sc, view.typed.ok ? 3 : 1);
+  }
+  return view.flipped ? ratesHTML(sc) : `<button class="btn mint big reveal" data-action="flip">${s.show}</button>`;
+}
+function renderStudy(){
+  const s = T(), d = getDeck(view.id); if (!d){ go({ name: "home" }); return; }
+  if (!view.card){
+    app.innerHTML = `${header()}
+      <div class="done">${mochi("happy")}
+        <h2>${s.doneT}</h2>
+        <p>${s.doneS(view.done || 0)}</p>
+        <div class="row" style="justify-content:center">
+          <button class="btn pink" data-action="home">${s.backHome}</button>
+          <button class="btn" data-action="open-deck" data-id="${d.id}">${s.viewDeck}</button>
+        </div>
+      </div>`;
+    return;
+  }
+  const c = view.card, r = view.reaction, f = faces(d, c);
+  app.innerHTML = `${header()}
+    <div class="study-top">
+      <button class="back" data-action="open-deck" data-id="${d.id}">${s.quit}</button>
+      <span class="name">${esc(d.name)}${view.lesson != null ? ` · ${s.lesson(view.lesson)}` : ""}</span>
+      ${cntPills(counts(d, view.lesson))}
+    </div>
+    <div class="stage">
+      <div class="peek" id="peek">${r ? `<span class="say">${s.react[r-1]}</span>` : ""}${mochi(r ? MOODS[r-1] : "idle", r ? "bounce" : "")}</div>
+      <div class="card ${view.flipped ? "flipped" : ""}" id="card" ${view.flipped || view.mode === "type" ? "" : 'data-action="flip" role="button" tabindex="0"'} aria-label="${s.tap}">
+        <div class="face front" aria-hidden="${view.flipped}">${f.front}</div>
+        <div class="face back" aria-hidden="${!view.flipped}">${f.back}</div>
+      </div>
+    </div>
+    <div class="controls">${controlsHTML(c)}</div>
+    <p class="keys">${view.mode === "type" ? s.typeKeys : s.keys}</p>`;
+  if (view.mode === "type" && !view.flipped) bindAnswer(checkTyped);
+  if (r){
+    clearTimeout(view.reactT);
+    view.reactT = setTimeout(() => { view.reaction = null; const p = $("#peek"); if (p) p.innerHTML = mochi("idle"); }, 1300);
+  }
+}
+
+/* ---------- conjugation practice (SRS) ---------- */
+function conjSettings(){
+  if (!db.settings.conj) db.settings.conj = { v: ["masu","te","nai","ta"], a: AF.slice() };
+  return db.settings.conj;
+}
+const conjWords = d => d.cards.filter(c => inLesson(c, view.lesson) && (view.kind === "a" ? isAdj(c) : isVerb(c)));
+const conjLogKey = () => view.kind === "a" ? "conjNewLogA" : "conjNewLog";
+const hashKey = str => { let h = 2166136261; for (const ch of str){ h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
+const NEW_STATE = () => ({ state: "new", due: 0, interval: 0, ease: 2.5, step: 0, reps: 0, lapses: 0 });
+function conjPairs(d){
+  const cs = conjSettings(), out = [];
+  for (const c of conjWords(d)) for (const f of (isVerb(c) ? cs.v : cs.a)){
+    const res = conjugate(c, f); if (!res) continue;
+    const key = c.id + "|" + f;
+    out.push({ key, form: f, card: c, res, st: (d.conj && d.conj[key]) || NEW_STATE() });
+  }
+  return out;
+}
+function conjNewLeft(d){
+  const k = dayKey();
+  const L = d[conjLogKey()];
+  return (!L || L.date !== k) ? NEW_PER_DAY : Math.max(0, NEW_PER_DAY - L.n);
+}
+function conjCounts(d, pairs){
+  const now = Date.now(), eod = endOfToday(); let learn = 0, rev = 0, nw = 0;
+  for (const p of pairs){
+    const st = p.st;
+    if (st.state === "new") nw++;
+    else if (st.state === "review"){ if (st.due <= eod) rev++; }
+    else if (st.due <= now + LEARN_AHEAD) learn++;
+  }
+  return { learn, rev, nw: Math.min(nw, conjNewLeft(d)) };
+}
+function nextPair(d, pairs, lastKey){
+  const now = Date.now(), eod = endOfToday(), by = (a, b) => a.st.due - b.st.due;
+  const learning = pairs.filter(p => p.st.state === "learning" || p.st.state === "relearning");
+  const dl = learning.filter(p => p.st.due <= now).sort(by); if (dl.length) return dl[0];
+  const dr = pairs.filter(p => p.st.state === "review" && p.st.due <= eod).sort(by); if (dr.length) return dr[0];
+  if (conjNewLeft(d) > 0){
+    const nw = pairs.filter(p => p.st.state === "new" && p.card.id !== (lastKey || "").split("|")[0]).sort((a, b) => hashKey(a.key) - hashKey(b.key));
+    const any = nw[0] || pairs.find(p => p.st.state === "new");
+    if (any) return any;
+  }
+  const ah = learning.filter(p => p.st.due <= now + LEARN_AHEAD).sort(by);
+  return ah.find(p => p.key !== lastKey) || ah[0] || null;
+}
+function renderConjSetup(){
+  const s = T(), d = getDeck(view.id); if (!d){ go({ name: "home" }); return; }
+  const all = d.cards.filter(c => inLesson(c, view.lesson));
+  const nV = all.filter(isVerb).length, nA = all.filter(isAdj).length;
+  if (view.kind !== "v" && view.kind !== "a") view.kind = nV || !nA ? "v" : "a";
+  const cs = conjSettings(), words = conjWords(d);
+  const hasV = view.kind === "v" && words.length > 0, hasA = view.kind === "a" && words.length > 0;
+  const cn = conjCounts(d, conjPairs(d)), any = cn.nw + cn.learn + cn.rev > 0;
+  const chips = (list, sel, k) => list.map(f => `<button class="lchip" data-action="cform" data-k="${k}" data-f="${f}" aria-pressed="${sel.includes(f)}">${s.forms[f]}</button>`).join("");
+  app.innerHTML = `${header()}
+    <div class="deck-head">
+      <button class="back" data-action="open-deck" data-id="${d.id}">‹ ${esc(d.name)}</button>
+      <h1>${s.conj}</h1>
+      <p class="dir">${view.lesson != null ? `<span class="lbadge">L${view.lesson}</span> ` : ""}${s.conjWordsN(words.length)}</p>
+    </div>
+    <div class="lessons" role="group" style="margin-bottom:22px">
+      <button class="lchip kind" data-action="ckind" data-k="v" aria-pressed="${view.kind === "v"}">${s.kindV} ${nV}</button>
+      <button class="lchip kind" data-action="ckind" data-k="a" aria-pressed="${view.kind === "a"}">${s.kindA} ${nA}</button>
+    </div>
+    ${!words.length ? `<section class="hero">${mochi("wow")}<div class="bubble">${s.conjNone}<small>${s.conjNoneSub}</small></div></section>` : `
+      ${hasV ? `<div class="setup-group"><h2 class="section-title">${s.verbForms}</h2><div class="lessons">${chips(VF, cs.v, "v")}</div></div>` : ""}
+      ${hasA ? `<div class="setup-group"><h2 class="section-title">${s.adjForms}</h2><div class="lessons">${chips(AF, cs.a, "a")}</div></div>` : ""}
+      ${cntPills(cn, "big-counts")}
+      <div class="actions">
+        <button class="btn pink big" data-action="conj-start" data-mode="flip" ${any ? "" : "disabled"}>${any ? s.conjFlip : s.studyNone}</button>
+        <button class="btn mint" data-action="conj-start" data-mode="type" ${any ? "" : "disabled"}>${s.typeStudy}</button>
+      </div>`}`;
+}
+function startConj(mode){
+  const s = T(), d = getDeck(view.id); if (!d) return;
+  const pairs = conjPairs(d);
+  if (!pairs.length){ toast(s.pickOne); return; }
+  go({ name: "conj", id: d.id, lesson: view.lesson ?? null, kind: view.kind, mode, pair: nextPair(d, pairs), flipped: false, typed: null, done: 0, misses: [] });
+}
+const RULES = {
+  ja: {
+    group: { ru: "る動詞", u: e => `う動詞（「${e}」で終わる）`, suru: "不規則動詞（する）", kuru: "不規則動詞（くる）", i: "い形容詞", na: "な形容詞" },
+    te: { "う":"う・つ・る で終わるう動詞 → って／った", "つ":"う・つ・る で終わるう動詞 → って／った", "る":"う・つ・る で終わるう動詞 → って／った",
+      "む":"む・ぶ・ぬ で終わるう動詞 → んで／んだ", "ぶ":"む・ぶ・ぬ で終わるう動詞 → んで／んだ", "ぬ":"む・ぶ・ぬ で終わるう動詞 → んで／んだ",
+      "く":"く で終わるう動詞 → いて／いた（行く は例外）", "ぐ":"ぐ で終わるう動詞 → いで／いだ", "す":"す で終わるう動詞 → して／した" },
+    iku: "「行く」だけは例外で「行って／行った」になります",
+    iRow: "最後の音を「い段」に変えてつけます（く→き、す→し）",
+    aRow: "最後の音を「あ段」に変えてつけます。「う」で終わる動詞は「わ」になります（買う→買わない）",
+    aru: "「ある」の否定は例外で「ない」です",
+    oRow: "最後の音を「お段」に変えて「う」をつけます（飲む→飲もう）",
+    eRow: "最後の音を「え段」に変えてつけます（飲む→飲める）",
+    ru: "「る」をとって、そのまま形をつけます",
+    ruPot: "「る」をとって「られる」。話し言葉では「れる」も使います",
+    suru: "「する」は不規則です。名詞＋する（勉強する）も同じ形になります",
+    suruPot: "「する」の可能形は「できる」です",
+    kuru: "「くる」は形によって「き・こ・く」に音が変わります。形ごとに覚えましょう",
+    i: "最後の「い」をとってつけます",
+    ii: "「いい」は活用すると「よ」に変わります（例外）",
+    na: "な形容詞は名詞と同じつけ方です（じゃない は ではない でもOK）"
+  },
+  en: {
+    group: { ru: "る-verb", u: e => `う-verb ending in ${e}`, suru: "irregular (する)", kuru: "irregular (くる)", i: "い-adjective", na: "な-adjective" },
+    te: { "う":"う-verbs ending in う, つ, る → って / った", "つ":"う-verbs ending in う, つ, る → って / った", "る":"う-verbs ending in う, つ, る → って / った",
+      "む":"う-verbs ending in む, ぶ, ぬ → んで / んだ", "ぶ":"う-verbs ending in む, ぶ, ぬ → んで / んだ", "ぬ":"う-verbs ending in む, ぶ, ぬ → んで / んだ",
+      "く":"う-verbs ending in く → いて / いた (行く is the exception)", "ぐ":"う-verbs ending in ぐ → いで / いだ", "す":"う-verbs ending in す → して / した" },
+    iku: "行く is the one exception: 行って / 行った",
+    iRow: "Change the last sound to the い-row, then attach the ending (く→き, す→し)",
+    aRow: "Change the last sound to the あ-row. Verbs ending in う use わ (買う→買わない)",
+    aru: "The negative of ある is just ない (exception)",
+    oRow: "Change the last sound to the お-row and add う (飲む→飲もう)",
+    eRow: "Change the last sound to the え-row (飲む→飲める)",
+    ru: "Drop る and attach the ending",
+    ruPot: "Drop る and add られる. In casual speech, れる is also used",
+    suru: "する is irregular. Noun + する verbs (勉強する) follow the same pattern",
+    suruPot: "The potential form of する is できる",
+    kuru: "くる changes its first sound to き, こ, or く depending on the form. Learn each one",
+    i: "Drop the final い and attach the ending",
+    ii: "いい turns into よ when conjugated (exception)",
+    na: "な-adjectives work like nouns (ではない is also fine for じゃない)"
+  }
+};
+function ruleInfo(card, form, res){
+  const R = RULES[db.settings.lang] || RULES.en, t = card.wtype;
+  let r = kataToHira(splitAlts(card.reading)[0] || splitAlts(card.jp)[0] || "");
+  if (t === "na") r = r.replace(/な$/, "");
+  const full = res.reading, e = r.slice(-1);
+  let a, b;
+  if (t === "irr"){ const k = /(する|くる)$/.test(r) ? r.length - 2 : 0; a = r.slice(k); b = full.slice(k); }
+  else if (t === "na"){ a = ""; b = full.slice(r.length); }
+  else { let cp = 0; while (cp < r.length - 1 && r[cp] === full[cp]) cp++; a = r.slice(cp); b = full.slice(cp); }
+  const change = a ? `${a} → ${b}` : `＋${b}`;
+  let group, note;
+  if (t === "ru"){ group = R.group.ru; note = form === "pot" ? R.ruPot : R.ru; }
+  else if (t === "u"){
+    group = R.group.u(e);
+    const iku = r === "いく" || /行く$/.test(card.jp);
+    if (form === "te" || form === "ta") note = iku ? R.iku : R.te[e];
+    else if (r === "ある" && (form === "nai" || form === "nakatta")) note = R.aru;
+    else if (["masu","masen","mashita","masendeshita","tai"].includes(form)) note = R.iRow;
+    else if (["nai","nakatta","pass","caus"].includes(form)) note = R.aRow;
+    else if (form === "vol") note = R.oRow;
+    else note = R.eRow;
+  } else if (t === "irr"){
+    const suru = r.endsWith("する");
+    group = suru ? R.group.suru : R.group.kuru;
+    note = suru ? (form === "pot" ? R.suruPot : R.suru) : R.kuru;
+  } else if (t === "i"){ group = R.group.i; note = r.endsWith("いい") ? R.ii : R.i; }
+  else { group = R.group.na; note = R.na; }
+  return { group, change, note };
+}
+const ruleHTML = ri => ri ? `<div class="rule"><span class="g">${esc(ri.group)}</span><span class="ch" lang="ja">${esc(ri.change)}</span><p>${esc(ri.note)}</p></div>` : "";
+function conjFaces(p){
+  const s = T(), c = p.card, res = p.res, base = baseOf(c), st = p.st;
+  const rdBase = c.reading && c.reading !== c.jp ? `<div class="rd" lang="ja">${esc(c.wtype === "na" ? c.reading.replace(/な$/, "") : c.reading)}</div>` : "";
+  const tm = st.state === "new" ? [s.cNew, "sky"] : st.state === "review" ? [s.cRev, "mint"] : [s.cLearn, "pink"];
+  const tag = `<span class="tag" style="background:var(--${tm[1]})">${tm[0]}</span>`;
+  const spk = canSpeak ? `<button class="spk" data-action="speak" aria-label="${s.listen}">${SPK}</button>` : "";
+  const ansRd = res.jp !== res.reading ? `<div class="rd" lang="ja">${esc(res.reading)}</div>` : "";
+  return {
+    front: `${tag}${rdBase}<div class="q jp" lang="ja">${esc(base)}</div><div class="mean">${esc(c.meaning)} ／ ${s.wtypes[c.wtype]}</div><div class="form-label">${s.forms[p.form]}</div>${view.mode === "type" ? "" : `<div class="hint">${s.tap}</div>`}`,
+    back: `${spk}<div class="mini"><span class="jp" lang="ja">${esc(base)}</span> → ${s.forms[p.form]}</div><hr>${ansRd}<div class="a jp" lang="ja">${esc(res.jp)}</div>${ruleHTML(ruleInfo(c, p.form, res))}`
+  };
+}
+function renderConj(){
+  const s = T(), d = getDeck(view.id); if (!d){ go({ name: "home" }); return; }
+  if (!view.pair){
+    const miss = view.misses || [];
+    app.innerHTML = `${header()}
+      <div class="done">${mochi("happy")}
+        <h2>${s.conjDoneT}</h2>
+        <p>${s.doneS(view.done || 0)}</p>
+      </div>
+      ${miss.length ? `<section class="panel" style="margin-top:0"><h2 class="section-title">${s.missed}</h2><ul class="clist">${miss.map(x => `<li style="grid-template-columns:1fr">
+        <div style="min-width:0"><div class="f"><span class="jp" lang="ja">${esc(x.base)}</span><small>${s.forms[x.form]}</small></div>
+        <div class="b"><span class="jp" lang="ja">${esc(x.ans)}${x.ans !== x.rd ? `（${esc(x.rd)}）` : ""}</span></div>
+        ${x.rule ? `<div class="b why"><span class="jp" lang="ja">${esc(x.rule.change)}</span>　${esc(x.rule.note)}</div>` : ""}</div></li>`).join("")}</ul></section>` : ""}
+      <div class="row" style="justify-content:center;margin-top:24px">
+        <button class="btn pink" data-action="conj-setup">${s.backConj}</button>
+        <button class="btn" data-action="open-deck" data-id="${d.id}">${s.viewDeck}</button>
+      </div>`;
+    return;
+  }
+  const p = view.pair, r = view.reaction, f = conjFaces(p);
+  app.innerHTML = `${header()}
+    <div class="study-top">
+      <button class="back" data-action="conj-setup">${s.quit}</button>
+      <span class="name">${s.conj} ／ ${view.kind === "a" ? s.kindA : s.kindV}</span>
+      ${cntPills(conjCounts(d, conjPairs(d)))}
+    </div>
+    <div class="stage">
+      <div class="peek" id="peek">${r ? `<span class="say">${s.react[r-1]}</span>` : ""}${mochi(r ? MOODS[r-1] : "idle", r ? "bounce" : "")}</div>
+      <div class="card ${view.flipped ? "flipped" : ""}" id="card" ${view.flipped || view.mode === "type" ? "" : 'data-action="flip" role="button" tabindex="0"'} aria-label="${s.tap}">
+        <div class="face front" aria-hidden="${view.flipped}">${f.front}</div>
+        <div class="face back" aria-hidden="${!view.flipped}">${f.back}</div>
+      </div>
+    </div>
+    <div class="controls">${controlsHTML(p)}</div>
+    <p class="keys">${view.mode === "type" ? s.typeKeys : s.keys}</p>`;
+  if (view.mode === "type" && !view.flipped) bindAnswer(checkTyped);
+  if (r){
+    clearTimeout(view.reactT);
+    view.reactT = setTimeout(() => { view.reaction = null; const pk = $("#peek"); if (pk) pk.innerHTML = mochi("idle"); }, 1300);
+  }
+}
+function rateConj(r){
+  const d = getDeck(view.id), p = view.pair; if (!d || !p) return;
+  const n = schedule(p.st, r);
+  d.conj = d.conj || {};
+  d.conj[p.key] = { state: n.state, due: n.due, interval: n.interval, ease: n.ease, step: n.step, reps: n.reps, lapses: n.lapses };
+  const k = dayKey();
+  if (p.st.state === "new"){ const lk = conjLogKey(); if (!d[lk] || d[lk].date !== k) d[lk] = { date: k, n: 0 }; d[lk].n++; }
+  db.stats.log[k] = (db.stats.log[k] || 0) + 1;
+  if ((r === 1 || (view.typed && !view.typed.ok)) && !view.misses.some(m => m.key === p.key))
+    view.misses.push({ key: p.key, base: baseOf(p.card), form: p.form, ans: p.res.jp, rd: p.res.reading, rule: ruleInfo(p.card, p.form, p.res) });
+  save();
+  view.done = (view.done || 0) + 1;
+  Object.assign(view, { reaction: r, flipped: false, typed: null });
+  view.pair = nextPair(d, conjPairs(d), p.key);
+  render();
+}
+
+function render(){
+  document.documentElement.lang = db.settings.lang;
+  document.title = T().app;
+  if (view.name === "deck") renderDeck();
+  else if (view.name === "study") renderStudy();
+  else if (view.name === "conj-setup") renderConjSetup();
+  else if (view.name === "conj") renderConj();
+  else renderHome();
+}
+function go(v){ view = v; render(); window.scrollTo(0, 0); }
+
+/* ---------- actions ---------- */
+function rate(r){
+  const d = getDeck(view.id), old = view.card; if (!d || !old) return;
+  d.cards[d.cards.findIndex(x => x.id === old.id)] = schedule(old, r);
+  if (old.state === "new"){
+    const k = dayKey();
+    if (!d.newLog || d.newLog.date !== k) d.newLog = { date: k, n: 0 };
+    d.newLog.n++;
+  }
+  const k = dayKey(); db.stats.log[k] = (db.stats.log[k] || 0) + 1;
+  save();
+  view.done = (view.done || 0) + 1;
+  view.reaction = r; view.flipped = false; view.typed = null;
+  view.card = nextCard(d, view.lesson, old.id);
+  render();
+}
+function checkTyped(){
+  const it = curItem();
+  if (view.flipped || !it) return;
+  const a = $("#ans"), raw = a ? a.value.trim() : "";
+  view.typed = { v: toKana(raw, true), ok: !!raw && answersOfItem(it).has(norm(raw)) };
+  flip();
+}
+function flip(){
+  const it = curItem();
+  if (view.flipped || !it) return;
+  if (view.mode === "type" && !view.typed){ checkTyped(); return; }
+  view.flipped = true;
+  const d = getDeck(view.id), card = $("#card"), ctr = app.querySelector(".controls");
+  if (!card || !ctr){ render(); return; }
+  card.classList.add("flipped");
+  ["data-action","role","tabindex"].forEach(a => card.removeAttribute(a));
+  card.querySelector(".front").setAttribute("aria-hidden", "true");
+  card.querySelector(".back").setAttribute("aria-hidden", "false");
+  ctr.innerHTML = controlsHTML(it);
+  const rb = ctr.querySelector(".rate.rec") || ctr.querySelector(".r3"); rb && rb.focus({ preventScroll: true });
+  if (d && d.autoplay) speakItem(it, true);
+}
+function deckDialog(deck){
+  const s = T();
+  let color = deck ? deck.color : COLORS[db.decks.length % COLORS.length];
+  openDialog(`<h2>${deck ? s.settings : s.deckNew}</h2>
+    <label>${s.deckName}<input type="text" id="f-name" maxlength="40" placeholder="${s.deckNamePh}" value="${deck ? esc(deck.name) : ""}" autofocus></label>
+    <label>${s.dir}<select id="f-dir">
+      <option value="jp-en" ${!deck || deck.dir !== "en-jp" ? "selected" : ""}>${s.jpEn}</option>
+      <option value="en-jp" ${deck && deck.dir === "en-jp" ? "selected" : ""}>${s.enJp}</option>
+    </select></label>
+    <label class="check"><input type="checkbox" id="f-rd" ${!deck || deck.showRd ? "checked" : ""}>${s.showRd}</label>
+    ${canSpeak ? `<label class="check"><input type="checkbox" id="f-auto" ${!deck || deck.autoplay ? "checked" : ""}>${s.autoplay}</label>` : ""}
+    <label>${s.color}<div class="swatches">${COLORS.map(c => `<button type="button" class="sw" data-c="${c}" style="background:var(--${c})" aria-label="${c}" aria-pressed="${c === color}"></button>`).join("")}</div></label>
+    <div class="row end">
+      ${deck ? `<button class="btn ghost danger" id="f-del" style="margin-right:auto">${s.delDeck}</button>` : ""}
+      <button class="btn ghost" data-action="close">${s.cancel}</button>
+      <button class="btn pink" id="f-ok">${deck ? s.save : s.create}</button>
+    </div>`, el => {
+    el.querySelectorAll(".sw").forEach(b => b.addEventListener("click", () => {
+      color = b.dataset.c; el.querySelectorAll(".sw").forEach(x => x.setAttribute("aria-pressed", x === b));
+    }));
+    const ok = () => {
+      const name = el.querySelector("#f-name").value.trim();
+      if (!name){ el.querySelector("#f-name").focus(); toast(s.nameReq); return; }
+      const auto = el.querySelector("#f-auto");
+      const vals = { name, color, dir: el.querySelector("#f-dir").value, showRd: el.querySelector("#f-rd").checked, autoplay: auto ? auto.checked : false };
+      if (deck){ Object.assign(deck, vals); save(); closeDialog(); render(); toast(s.saved); }
+      else { const d = Object.assign({ id: uid(), newLog: null, cards: [] }, vals); db.decks.push(d); save(); closeDialog(); go({ name: "deck", id: d.id }); toast(s.created); }
+    };
+    el.querySelector("#f-ok").addEventListener("click", ok);
+    el.querySelector("#f-name").addEventListener("keydown", e => { if (e.key === "Enter" && !e.isComposing){ e.preventDefault(); ok(); } });
+    const del = el.querySelector("#f-del");
+    del && del.addEventListener("click", () => confirmDialog(s.delDeckMsg(esc(deck.name), deck.cards.length), s.delDeck, () => {
+      db.decks = db.decks.filter(x => x.id !== deck.id); save(); go({ name: "home" }); toast(s.deleted);
+    }));
+  });
+}
+function cardDialog(deck, card){
+  const s = T();
+  const lastLesson = card ? card.lesson : (view.lesson ?? (deck.cards.length ? deck.cards[deck.cards.length - 1].lesson : null));
+  openDialog(`<h2>${card ? s.editCard : s.addCard}</h2>
+    <div class="two">
+      <label>${s.fJp}<input type="text" class="jp" id="f-jp" lang="ja" placeholder="${s.fJpPh}" value="${card ? esc(card.jp) : ""}" autofocus></label>
+      <label>${s.fRd}<input type="text" class="jp" id="f-rd" lang="ja" placeholder="${s.fRdPh}" value="${card ? esc(card.reading) : ""}"></label>
+    </div>
+    <label>${s.fMean}<input type="text" id="f-mean" placeholder="${s.fMeanPh}" value="${card ? esc(card.meaning) : ""}"></label>
+    <div class="two">
+      <label>${s.fLesson}<input type="number" id="f-lesson" min="1" max="99" inputmode="numeric" value="${lastLesson ?? ""}"></label>
+      <label>${s.fNote}<input type="text" id="f-note" placeholder="${s.fNotePh}" value="${card ? esc(card.note) : ""}"></label>
+    </div>
+    <label>${s.fWtype}<select id="f-wt">${Object.entries(s.wtypes).map(([k, l]) => `<option value="${k}" ${(card ? card.wtype || "" : "") === k ? "selected" : ""}>${l}</option>`).join("")}</select></label>
+    <div class="row end">
+      <span class="note" style="margin-right:auto">${card ? "" : s.addHint}</span>
+      <button class="btn ghost" data-action="close">${card ? s.cancel : s.close}</button>
+      <button class="btn pink" id="f-ok">${card ? s.save : s.add}</button>
+    </div>`, el => {
+    const g = id => el.querySelector(id);
+    let touched = !!(card && card.wtype);
+    g("#f-wt").addEventListener("change", () => touched = true);
+    const guess = () => { if (!touched) g("#f-wt").value = guessType(kataToHira(g("#f-rd").value.trim() || g("#f-jp").value.trim()), g("#f-jp").value.trim()); };
+    g("#f-rd").addEventListener("input", guess); g("#f-jp").addEventListener("input", guess);
+    const ok = () => {
+      const jp = g("#f-jp").value.trim(), mean = g("#f-mean").value.trim();
+      if (!jp || !mean){ (jp ? g("#f-mean") : g("#f-jp")).focus(); toast(s.bothReq); return; }
+      const ln = parseInt(g("#f-lesson").value, 10);
+      const vals = { jp, reading: g("#f-rd").value.trim(), meaning: mean, lesson: Number.isFinite(ln) ? ln : null, note: g("#f-note").value.trim(), wtype: g("#f-wt").value };
+      if (card){ Object.assign(card, vals); save(); closeDialog(); render(); toast(s.saved); }
+      else {
+        deck.cards.push(newCard(vals.jp, vals.reading, vals.meaning, vals.lesson, vals.note, vals.wtype)); save(); render();
+        ["#f-jp","#f-rd","#f-mean","#f-note","#f-wt"].forEach(id => g(id).value = ""); touched = false; g("#f-jp").focus();
+        toast(s.added(deck.cards.length));
+      }
+    };
+    g("#f-ok").addEventListener("click", ok);
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" && !e.isComposing && (e.ctrlKey || e.metaKey)){ e.preventDefault(); ok(); }
+    });
+  });
+}
+const WT_MAP = { ru:"ru", "る":"ru", "ru-verb":"ru", "る動詞":"ru", ichidan:"ru", u:"u", "う":"u", "u-verb":"u", "う動詞":"u", godan:"u",
+  irr:"irr", irregular:"irr", "する":"irr", "不規則":"irr", "不規則動詞":"irr", i:"i", "い":"i", "i-adj":"i", "い形容詞":"i", na:"na", "な":"na", "na-adj":"na", "な形容詞":"na" };
+function parseLine(line){
+  const sep = line.includes("\t") ? "\t" : ",";
+  const p = line.split(sep).map(x => x.trim());
+  const trim = () => { while (p.length && !p[p.length - 1]) p.pop(); };
+  trim();
+  if (p.length < 2 || !p[0]) return null;
+  let lesson = null, wt = "";
+  if (p.length >= 3 && WT_MAP[p[p.length - 1].toLowerCase()] !== undefined){ wt = WT_MAP[p.pop().toLowerCase()]; trim(); }
+  if (p.length >= 3 && /^\d{1,2}$/.test(p[p.length - 1])){ lesson = parseInt(p.pop(), 10); trim(); }
+  if (p.length < 2) return null;
+  if (p.length === 2) return [p[0], "", p[1], lesson, wt];
+  return [p[0], p[1], p.slice(2).join(", "), lesson, wt];
+}
+function importDialog(deck){
+  const s = T();
+  openDialog(`<h2>${s.bulk}</h2>
+    <p class="note">${s.bulkHelp}</p>
+    <label class="sr" for="f-bulk">${s.bulk}</label>
+    <textarea id="f-bulk" class="jp" rows="8" placeholder="${esc(s.bulkPh)}" autofocus></textarea>
+    <div class="row end">
+      <span class="note" id="f-count" style="margin-right:auto">${s.nCards(0)}</span>
+      <button class="btn ghost" data-action="close">${s.cancel}</button>
+      <button class="btn pink" id="f-ok">${s.add}</button>
+    </div>`, el => {
+    const ta = el.querySelector("#f-bulk");
+    const parse = () => ta.value.split(/\r?\n/).map(parseLine).filter(Boolean);
+    ta.addEventListener("input", () => { el.querySelector("#f-count").textContent = s.nCards(parse().length); });
+    el.querySelector("#f-ok").addEventListener("click", () => {
+      const rows = parse();
+      if (!rows.length){ toast(s.noRows); return; }
+      const t = Date.now();
+      rows.forEach(([jp, rd, m, l, w], i) => deck.cards.push(Object.assign(newCard(jp, rd, m, l, "", w), { created: t + i })));
+      save(); closeDialog(); render(); toast(s.bulkAdded(rows.length));
+    });
+  });
+}
+function voiceDialog(){
+  const s = T(), vs = voiceSettings(), list = jaVoices().sort((a, b) => voiceScore(b) - voiceScore(a));
+  openDialog(`<h2>${s.voiceT}</h2>
+    ${list.length ? `<label>${s.voiceSel}<select id="f-voice">
+      <option value="">${s.voiceAuto}</option>
+      ${list.map(v => `<option value="${esc(v.name)}" ${v.name === vs.name ? "selected" : ""}>${esc(v.name)}</option>`).join("")}
+    </select></label>` : `<p class="note" id="f-voice">${s.voiceNone}</p>`}
+    <label>${s.voiceRate} <span id="f-rate-v">${vs.rate.toFixed(2)}×</span><input type="range" id="f-rate" min="0.6" max="1.3" step="0.05" value="${vs.rate}" style="width:100%;accent-color:var(--pink)"></label>
+    <label>${s.voiceSrc}<select id="f-src">
+      <option value="kanji" ${vs.src === "kanji" ? "selected" : ""}>${s.srcKanji}</option>
+      <option value="kana" ${vs.src === "kana" ? "selected" : ""}>${s.srcKana}</option>
+    </select></label>
+    <p class="note">${s.voiceTip}</p>
+    <div class="row end">
+      <button class="btn" id="f-test" style="margin-right:auto">${s.voiceTest}</button>
+      <button class="btn pink" data-action="close">${s.close}</button>
+    </div>`, el => {
+    const sel = el.querySelector("select#f-voice"), rate = el.querySelector("#f-rate"), src = el.querySelector("#f-src");
+    sel && sel.addEventListener("change", () => { vs.name = sel.value; save(); speakText(s.testText); });
+    rate.addEventListener("input", () => { vs.rate = Number(rate.value); el.querySelector("#f-rate-v").textContent = vs.rate.toFixed(2) + "×"; save(); });
+    src.addEventListener("change", () => { vs.src = src.value; save(); });
+    el.querySelector("#f-test").addEventListener("click", () => speakText(s.testText));
+  });
+}
+function confirmDialog(msg, label, fn){
+  const s = T();
+  openDialog(`<h2>${label}</h2><p>${msg}</p>
+    <div class="row end"><button class="btn ghost" data-action="close" autofocus>${s.cancel}</button><button class="btn danger fill" id="f-ok">${label}</button></div>`,
+    el => el.querySelector("#f-ok").addEventListener("click", () => { closeDialog(); fn(); }));
+}
+
+document.addEventListener("click", e => {
+  const el = e.target.closest("[data-action]"); if (!el) return;
+  const a = el.dataset.action, id = el.dataset.id, d = getDeck(view.id), s = T();
+  switch (a){
+    case "home": go({ name: "home" }); break;
+    case "lang": db.settings.lang = db.settings.lang === "en" ? "ja" : "en"; save(); render(); break;
+    case "voice": voiceDialog(); break;
+    case "open-deck": go({ name: "deck", id, lesson: view.id === id ? view.lesson : null }); break;
+    case "lesson": view.lesson = el.dataset.l === "" ? null : Number(el.dataset.l); renderDeck(); break;
+    case "new-deck": deckDialog(null); break;
+    case "edit-deck": d && deckDialog(d); break;
+    case "add-card": d && cardDialog(d, null); break;
+    case "import": d && importDialog(d); break;
+    case "edit-card": d && cardDialog(d, d.cards.find(c => c.id === id)); break;
+    case "del-card": if (d){ const c = d.cards.find(x => x.id === id);
+      confirmDialog(s.delCardMsg(esc(c.jp)), s.delCard, () => { d.cards = d.cards.filter(x => x.id !== id); save(); render(); toast(s.deleted); }); } break;
+    case "study": if (d) go({ name: "study", id: d.id, mode: el.dataset.mode || "flip", typed: null, lesson: view.lesson ?? null, card: nextCard(d, view.lesson ?? null), flipped: false, done: 0 }); break;
+    case "check": checkTyped(); break;
+    case "conj-setup": if (d) go({ name: "conj-setup", id: d.id, lesson: view.lesson ?? null, kind: view.kind }); break;
+    case "ckind": view.kind = el.dataset.k; renderConjSetup(); break;
+    case "cform": { const arr = conjSettings()[el.dataset.k], f = el.dataset.f, i = arr.indexOf(f);
+      if (i >= 0) arr.splice(i, 1); else arr.push(f); save(); renderConjSetup(); break; }
+    case "conj-start": startConj(el.dataset.mode || "flip"); break;
+    case "flip": flip(); break;
+    case "speak": e.stopPropagation(); speakItem(curItem(), view.flipped); break;
+    case "rate": (view.name === "conj" ? rateConj : rate)(Number(el.dataset.r)); break;
+    case "close": closeDialog(); break;
+  }
+});
+document.addEventListener("keydown", e => {
+  const it = curItem();
+  if (!it || dlg.open) return;
+  if (e.target.matches("input,textarea,select")) return;
+  if (view.mode === "type" && !view.flipped){
+    if (e.key === " " || e.key === "Enter"){ e.preventDefault(); const a = $("#ans"); a && a.focus(); }
+    return;
+  }
+  if (e.key === "p" || e.key === "P"){ speakItem(it, view.flipped); return; }
+  if (!view.flipped && (e.key === " " || e.key === "Enter")){ e.preventDefault(); flip(); }
+  else if (view.flipped && ["1","2","3","4"].includes(e.key)){ e.preventDefault(); (view.name === "conj" ? rateConj : rate)(Number(e.key)); }
+});
+
+save();
+render();
+})();
+</script>
+</body>
+</html>
