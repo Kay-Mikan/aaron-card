@@ -283,6 +283,30 @@ button.chip:hover{border-color:var(--muted)}
   .clist .meta{justify-content:flex-start}
   .hero{margin:28px 0 28px}
 }
+/* larger text on cards */
+.actions .btn.wide{grid-column:1/-1}
+.q{font-size:clamp(42px,12vw,60px)}
+.q.en{font-size:clamp(30px,8.6vw,40px)}
+.a{font-size:clamp(34px,10vw,46px)}
+.rd{font-size:clamp(17px,4.8vw,20px)}
+.mini{font-size:clamp(18px,5vw,21px)}
+.face .mean{font-size:16px}
+.form-label{font-size:clamp(17px,4.8vw,20px)}
+.tag{font-size:12px}
+.hint{font-size:13px}
+.rule{font-size:15px}
+.rule .ch{font-size:23px}
+.result{font-size:17px}
+.result .jp{font-size:25px}
+.ansbox input{font-size:26px}
+.memo{font-size:15px}
+@media (max-width:480px){
+  .card{min-height:min(62vh,440px)}
+  .face{padding:44px 18px 56px}
+  .rate .lb{font-size:15px}
+  .rate .iv{font-size:13px}
+  .rate{padding:11px 4px}
+}
 @media (hover:none) and (pointer:coarse){ .keys{display:none} }
 @media (prefers-reduced-motion:reduce){ *{animation:none!important; transition:none!important} }
 </style>
@@ -1018,8 +1042,7 @@ function renderDeck(){
       ${cntPills(c, "big-counts")}
       <div class="actions">
         <button class="btn pink big" data-action="study" ${canStudy ? "" : "disabled"}>${canStudy ? s.study : s.studyNone}</button>
-        <button class="btn mint" data-action="study" data-mode="type" ${canStudy ? "" : "disabled"}>${s.typeStudy}</button>
-        <button class="btn" data-action="conj-setup">${s.conj}</button>
+        <button class="btn mint wide" data-action="conj-setup">${s.conj}</button>
       </div>
     </div>
     <section class="panel">
@@ -1223,7 +1246,6 @@ function renderConjSetup(){
       ${cntPills(cn, "big-counts")}
       <div class="actions">
         <button class="btn pink big" data-action="conj-start" data-mode="flip" ${any ? "" : "disabled"}>${any ? s.conjFlip : s.studyNone}</button>
-        <button class="btn mint" data-action="conj-start" data-mode="type" ${any ? "" : "disabled"}>${s.typeStudy}</button>
       </div>`}`;
 }
 function startConj(mode){
